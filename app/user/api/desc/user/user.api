@@ -1,0 +1,99 @@
+syntax = "v1"
+
+info(
+    title: "user API req and resp"
+    desc: "user API req and resp"
+    author: "csl30003"
+    email: "863577413@qq.com"
+    version: "v1"
+)
+
+type (
+    RegisterReq {
+
+    }
+    RegisterResp {
+
+    }
+)
+
+type (
+    LoginReq {
+
+    }
+    LoginResp {
+
+    }
+)
+
+type (
+    GetUserInfoReq {
+
+    }
+    GetUserInfoResp {
+
+    }
+)
+
+type (
+    LogoutReq {
+
+    }
+    LogoutResp {
+
+    }
+)
+
+type (
+    GetVeidoListReq {
+
+    }
+    GetVeidoListResp {
+
+    }
+)
+
+type (
+    UploadVeidoReq {
+
+    }
+    UploadVeidoResp {
+
+    }
+)
+
+type (
+    DeleteVeidoReq {
+
+    }
+    DeleteVeidoResp {
+
+    }
+)
+
+type (
+    CommentVedioReq {
+
+    }
+    CommentVedioResp {
+
+    }
+)
+
+type (
+    CommentCommentReq {
+
+    }
+    CommentCommentResp {
+
+    }
+)
+
+type (
+    DeleteCommentReq {
+
+    }
+    DeleteCommentResp {
+
+    }
+)

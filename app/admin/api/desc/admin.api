@@ -1,0 +1,56 @@
+syntax = "v1"
+
+info(
+    title: "admin API"
+    desc: "admin API"
+    author: "csl30003"
+    email: "863577413@qq.com"
+    version: "v1"
+)
+
+import (
+    "admin/admin.api"
+)
+
+// 不需要登录
+@server (
+    prefix: admin/v1
+    group: admin
+)
+service admin {
+    // 登录
+    @doc "login"
+    @handler login
+    post /login (loginReq) returns (loginResp)
+}
+
+// 需要登录
+@server (
+    prefix: admin/v1
+    group: admin
+    jwt: Auth
+)
+service admin {
+    // 退出登录
+    @doc "logout"
+    @handler logout
+    get /logout (LogoutReq) returns (LogoutResp)
+
+    // 获取已审核的视频列表
+
+    // 获取未审核视频列表
+
+    // 审核视频
+
+    // 修改视频信息
+
+    // 删除视频信息
+
+    // 获取用户列表
+
+    // 修改用户信息
+
+    // 查看评论列表
+
+    // 删除评论
+}

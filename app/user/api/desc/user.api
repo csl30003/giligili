@@ -1,0 +1,78 @@
+syntax = "v1"
+
+info(
+    title: "user API"
+    desc: "user API"
+    author: "csl30003"
+    email: "863577413@qq.com"
+    version: "v1"
+)
+
+import (
+    "user/user.api"
+)
+
+// 不需要登录
+@server (
+    prefix: user/v1
+    group: user
+)
+service user {
+    // 注册
+    @doc "register"
+    @handler register
+    post /register (RegisterReq) returns (RegisterResp)
+
+    // 登录
+    @doc "login"
+    @handler login
+    post /login (LoginReq) returns (LoginResp)
+}
+
+// 需要登录
+@server (
+    prefix: user/v1
+    group: user
+    jwt: Auth
+)
+service user {
+    // 获取用户信息
+    @doc "get user info"
+    @handler getUserInfo
+    get /getUserInfo (GetUserInfoReq) returns (GetUserInfoResp)
+
+    // 退出登录
+    @doc "logout"
+    @handler logout
+    get /logout (LogoutReq) returns (LogoutResp)
+
+    // 查看自己的视频
+    @doc "get veido list"
+    @handler getVeidoList
+    get /getVeidoList (GetVeidoListReq) returns (GetVeidoListResp)
+
+    // 上传视频
+    @doc "upload veido"
+    @handler uploadVeido
+    post /uploadVeido (UploadVeidoReq) returns (UploadVeidoResp)
+
+    // 删除视频
+    @doc "delete veido"
+    @handler deleteVeido
+    delete /deleteVeido (DeleteVeidoReq) returns (DeleteVeidoResp)
+
+    // 评论视频
+    @doc "comment vedio"
+    @handler commentVedio
+    post /commentVedio (CommentVedioReq) returns (CommentVedioResp)
+
+    // 评论评论
+    @doc "comment on the comment"
+    @handler commentComment
+    post /commentComment (CommentCommentReq) returns (CommentCommentResp)
+
+    // 删除评论
+    @doc "delete comment"
+    @handler deleteComment
+    delete /deleteComment (DeleteCommentReq) returns (DeleteCommentResp)
+}
