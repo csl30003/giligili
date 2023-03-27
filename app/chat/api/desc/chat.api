@@ -1,31 +1,31 @@
 syntax = "v1"
 
 info(
-    title: "chat API"
-    desc: "chat API"
-    author: "csl30003"
-    email: "863577413@qq.com"
-    version: "v1"
+	title: "chat API"
+	desc: "chat API"
+	author: "csl30003"
+	email: "863577413@qq.com"
+	version: "v1"
 )
 
 import (
-    "chat/chat.api"
+	"chat/chat.api"
 )
 
 // 需要登录
 @server (
-    prefix: chat/v1
-    group: chat
-    jwt: Auth
+	prefix: chat/v1
+	group: chat
+	jwt: Auth
 )
 service chat {
-    // 发送聊天信息
-    @doc "send chat message"
-    @handler sendChatMessage
-    post /sendChatMessage (SendChatMessageReq) returns (SendChatMessageResp)
-
-    // 获取聊天记录
-    @doc "get chat history"
-    @handler getChatHistory
-    get /getChatHistory (GetChatHistoryReq) returns (GetChatHistoryResp)
+	// 发送聊天信息
+	@doc "send chat message"
+	@handler sendChatMessage
+	post /sendChatMessage (SendChatMessageReq) returns (SendChatMessageResp)
+	
+	// 获取聊天记录
+	@doc "get chat history"
+	@handler getChatHistory
+	get /getChatHistory (GetChatHistoryReq) returns (GetChatHistoryResp)
 }
