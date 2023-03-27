@@ -1,0 +1,97 @@
+syntax = "v1"
+
+info(
+    title: "video API req and resp"
+    desc: "video API req and resp"
+    author: "csl30003"
+    email: "863577413@qq.com"
+    version: "v1"
+)
+
+type (
+    GetVideoListReq {
+        Page int `json:"page"`
+        PageSize int `json:"pageSize"`
+        Keyword string `json:"keyword"`
+    }
+    GetVideoListResp {
+        VideoList []Video `json:"videoList"`
+    }
+)
+
+type (
+    Video {
+        VideoId int `json:"videoId"`
+        Title string `json:"title"`
+        Url string `json:"url"`
+        UserId int `json:"userId"`
+        UserNickname string `json:"userNickname"`
+        Description string `json:"description"`
+        LikeCount int `json:"likeCount"`
+        DislikeCount int `json:"dislikeCount"`
+        CommentCount int `json:"commentCount"`
+        CreateTime string `json:"createTime"`
+        UpdateTime string `json:"updateTime"`
+    }
+)
+
+type (
+    GetVideoDetailReq {
+        VideoId int `json:"videoId"`
+    }
+    GetVideoDetailResp {
+        Video Video `json:"video"`
+    }
+)
+
+type (
+    UploadVideoReq {
+        UserId int `json:"userId"`
+        Title string `json:"title"`
+        Url string `json:"url"`
+        Description string `json:"description"`
+    }
+    UploadVideoResp {
+        Success bool `json:"success"`
+    }
+)
+
+type (
+    LikeVideoReq {
+        UserId int `json:"userId"`
+        VideoId int `json:"videoId"`
+    }
+    LikeVideoResp {
+        Success bool `json:"success"`
+    }
+)
+
+type (
+    UnlikeVideoReq {
+        UserId int `json:"userId"`
+        VideoId int `json:"videoId"`
+    }
+    UnlikeVideoResp {
+        Success bool `json:"success"`
+    }
+)
+
+type (
+    DislikeVideoReq {
+        UserId int `json:"userId"`
+        VideoId int `json:"videoId"`
+    }
+    DislikeVideoResp {
+        Success bool `json:"success"`
+    }
+)
+
+type (
+    UndislikeVideoReq {
+        UserId int `json:"userId"`
+        VideoId int `json:"videoId"`
+    }
+    UndislikeVideoResp {
+        Success bool `json:"success"`
+    }
+)

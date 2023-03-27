@@ -1,0 +1,13 @@
+一些命令记录 看情况修改
+
+生成model
+goctl model mysql datasource -url="root:password@tcp(127.0.0.1:3306)/databaseName" -table="tableName"  -dir="./" -cache=true --style=goZero
+可以先在一个文件夹里生成 确认无误再转到别的文件夹
+
+生成api
+goctl api go -api xxx.api -dir ../ --style=goZero
+
+生成rpc
+goctl rpc protoc xxx.proto --go_out=../ --go-grpc_out=../ --zrpc_out=../ --style=goZero
+
+还有几个好用的goctl再学

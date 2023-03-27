@@ -1,0 +1,60 @@
+syntax = "v1"
+
+info(
+    title: "comment API req and resp"
+    desc: "comment API req and resp"
+    author: "csl30003"
+    email: "863577413@qq.com"
+    version: "v1"
+)
+
+type (
+    GetCommentListReq {
+        VideoId int `json:"videoId"`
+    }
+    Comment {
+        CommentId int `json:"commentId"`
+        UserId int `json:"userId"`
+        Content string `json:"content"`
+        LikeCount int `json:"likeCount"`
+        DislikeCount int `json:"dislikeCount"`
+        ReplyCount int `json:"replyCount"`
+        CreateTime string `json:"createTime"`
+        UpdateTime string `json:"updateTime"`
+    }
+    GetCommentListResp {
+        CommentList []Comment `json:"commentList"`
+    }
+)
+
+type (
+    CommentVideoReq {
+        UserId int `json:"userId"`
+        VideoId int `json:"videoId"`
+        Content string `json:"content"`
+        ReplyId int `json:"replyId"`
+    }
+    CommentVideoResp {
+        Success bool `json:"success"`
+    }
+)
+
+type (
+    ReplyCommentReq {
+        UserId int `json:"userId"`
+        CommentId int `json:"commentId"`
+        Content string `json:"content"`
+    }
+    ReplyCommentResp {
+        Success bool `json:"success"`
+    }
+)
+
+type (
+    DeleteCommentReq {
+        CommentId int `json:"commentId"`
+    }
+    DeleteCommentResp {
+        Success bool `json:"success"`
+    }
+)

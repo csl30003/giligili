@@ -1,0 +1,37 @@
+syntax = "v1"
+
+info(
+    title: "chat API req and resp"
+    desc: "chat API req and resp"
+    author: "csl30003"
+    email: "863577413@qq.com"
+    version: "v1"
+)
+
+type (
+    SendChatMessageReq {
+        ToUserId int `json:"toUserId"`
+        Content string `json:"content"`
+    }
+    SendChatMessageResp {}
+)
+
+type (
+    GetChatHistoryReq {
+        UserId int `json:"userId"`
+    }
+    GetChatHistoryResp {
+        ChatHistory []ChatMessage `json:"chatHistory"`
+    }
+)
+
+type (
+    ChatMessage {
+        FromUserId int `json:"fromUserId"`
+        FromUserNickname string `json:"fromUserNickname"`
+        ToUserId int `json:"toUserId"`
+        ToUserNickname string `json:"toUserNickname"`
+        Content string `json:"content"`
+        CreateTime string `json:"createTime"`
+    }
+)

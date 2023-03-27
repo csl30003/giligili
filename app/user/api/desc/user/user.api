@@ -10,90 +10,67 @@ info(
 
 type (
     RegisterReq {
-
+        Username string `json:"username"`
+        Password string `json:"password"`
+        Nickname string `json:"nickname"`
     }
     RegisterResp {
-
+        UserId int `json:"userId"`
     }
 )
 
 type (
     LoginReq {
-
+        Username string `json:"username"`
+        Password string `json:"password"`
     }
     LoginResp {
-
+        Token string `json:"token"`
     }
 )
 
 type (
     GetUserInfoReq {
-
+        UserId int `json:"userId"`
     }
     GetUserInfoResp {
-
+        Username string `json:"username"`
+        Nickname string `json:"nickname"`
+        Email string `json:"email"`
+        Phone string `json:"phone"`
+        Avatar string `json:"avatar"`
     }
 )
 
 type (
-    LogoutReq {
+    LogoutReq {}
+    LogoutResp {}
+)
 
-    }
-    LogoutResp {
-
+type (
+    GetFollowerListReq {}
+    GetFollowerListResp {
+        FollowerList []int `json:"followerList"`
     }
 )
 
 type (
-    GetVeidoListReq {
-
-    }
-    GetVeidoListResp {
-
+    GetFolloweeListReq {}
+    GetFolloweeListResp {
+        FolloweeList []int `json:"followeeList"`
     }
 )
 
 type (
-    UploadVeidoReq {
-
+    FollowUserReq {
+        FolloweeId int `json:"followeeId"`
     }
-    UploadVeidoResp {
-
-    }
+    FollowUserResp {}
 )
 
 type (
-    DeleteVeidoReq {
-
+    UnfollowUserReq {
+        FolloweeId int `json:"followeeId"`
     }
-    DeleteVeidoResp {
-
-    }
-)
-
-type (
-    CommentVedioReq {
-
-    }
-    CommentVedioResp {
-
-    }
-)
-
-type (
-    CommentCommentReq {
-
-    }
-    CommentCommentResp {
-
-    }
-)
-
-type (
-    DeleteCommentReq {
-
-    }
-    DeleteCommentResp {
-
-    }
+    UnfollowUserResp {}
 )
