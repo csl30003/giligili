@@ -13,14 +13,17 @@ import (
 )
 
 type (
-	LoginReq     = pb.LoginReq
-	LoginResp    = pb.LoginResp
-	RegisterReq  = pb.RegisterReq
-	RegisterResp = pb.RegisterResp
+	GetUserInfoReq  = pb.GetUserInfoReq
+	GetUserInfoResp = pb.GetUserInfoResp
+	LoginReq        = pb.LoginReq
+	LoginResp       = pb.LoginResp
+	RegisterReq     = pb.RegisterReq
+	RegisterResp    = pb.RegisterResp
 
 	User interface {
 		Register(ctx context.Context, in *RegisterReq, opts ...grpc.CallOption) (*RegisterResp, error)
 		Login(ctx context.Context, in *LoginReq, opts ...grpc.CallOption) (*LoginResp, error)
+		GetUserInfo(ctx context.Context, in *GetUserInfoReq, opts ...grpc.CallOption) (*GetUserInfoResp, error)
 	}
 
 	defaultUser struct {
@@ -42,4 +45,9 @@ func (m *defaultUser) Register(ctx context.Context, in *RegisterReq, opts ...grp
 func (m *defaultUser) Login(ctx context.Context, in *LoginReq, opts ...grpc.CallOption) (*LoginResp, error) {
 	client := pb.NewUserClient(m.cli.Conn())
 	return client.Login(ctx, in, opts...)
+}
+
+func (m *defaultUser) GetUserInfo(ctx context.Context, in *GetUserInfoReq, opts ...grpc.CallOption) (*GetUserInfoResp, error) {
+	client := pb.NewUserClient(m.cli.Conn())
+	return client.GetUserInfo(ctx, in, opts...)
 }

@@ -25,7 +25,6 @@ type LoginResp struct {
 }
 
 type GetUserInfoReq struct {
-	UserId int `json:"userId"`
 }
 
 type GetUserInfoResp struct {

@@ -34,9 +34,7 @@ type (
 )
 
 type (
-    GetUserInfoReq {
-        UserId int `json:"userId"`
-    }
+    GetUserInfoReq {}
     GetUserInfoResp {
         Username string `json:"username"`
         Nickname string `json:"nickname"`
