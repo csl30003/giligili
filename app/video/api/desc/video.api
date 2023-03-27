@@ -1,62 +1,62 @@
 syntax = "v1"
 
 info(
-    title: "video API"
-    desc: "video API"
-    author: "csl30003"
-    email: "863577413@qq.com"
-    version: "v1"
+	title: "video API"
+	desc: "video API"
+	author: "csl30003"
+	email: "863577413@qq.com"
+	version: "v1"
 )
 
 import (
-    "video/video.api"
+	"video/video.api"
 )
 
 @server (
-    prefix: video/v1
-    group: video
+	prefix: video/v1
+	group: video
 )
 service video {
-    // 游客获取视频列表
-    @doc "get video list"
-    @handler getVideoList
-    get /getVideoList (GetVideoListReq) returns (GetVideoListResp)
-
-    // 游客获取视频详情
-    @doc "get video detail"
-    @handler getVideoDetail
-    get /getVideoDetail (GetVideoDetailReq) returns (GetVideoDetailResp)
+	// 游客获取视频列表
+	@doc "get video list"
+	@handler getVideoList
+	get /getVideoList (GetVideoListReq) returns (GetVideoListResp)
+	
+	// 游客获取视频详情
+	@doc "get video detail"
+	@handler getVideoDetail
+	get /getVideoDetail (GetVideoDetailReq) returns (GetVideoDetailResp)
 }
 
 // 用户操作需要登录
 @server (
-    prefix: video/v1
-    group: video
-    jwt: Auth
+	prefix: video/v1
+	group: video
+	jwt: Auth
 )
 service video {
-    // 上传视频
-    @doc "upload video"
-    @handler uploadVideo
-    post /uploadVideo (UploadVideoReq) returns (UploadVideoResp)
-
-    // 点赞视频
-    @doc "like video"
-    @handler likeVideo
-    post /likeVideo (LikeVideoReq) returns (LikeVideoResp)
-
-    // 取消点赞视频
-    @doc "unlike video"
-    @handler unlikeVideo
-    post /unlikeVideo (UnlikeVideoReq) returns (UnlikeVideoResp)
-
-    // 踩视频
-    @doc "dislike video"
-    @handler dislikeVideo
-    post /dislikeVideo (DislikeVideoReq) returns (DislikeVideoResp)
-
-    // 取消踩视频
-    @doc "undislike video"
-    @handler undislikeVideo
-    post /undislikeVideo (UndislikeVideoReq) returns (UndislikeVideoResp)
+	// 上传视频
+	@doc "upload video"
+	@handler uploadVideo
+	post /uploadVideo (UploadVideoReq) returns (UploadVideoResp)
+	
+	// 点赞视频
+	@doc "like video"
+	@handler likeVideo
+	post /likeVideo (LikeVideoReq) returns (LikeVideoResp)
+	
+	// 取消点赞视频
+	@doc "unlike video"
+	@handler unlikeVideo
+	post /unlikeVideo (UnlikeVideoReq) returns (UnlikeVideoResp)
+	
+	// 踩视频
+	@doc "dislike video"
+	@handler dislikeVideo
+	post /dislikeVideo (DislikeVideoReq) returns (DislikeVideoResp)
+	
+	// 取消踩视频
+	@doc "undislike video"
+	@handler undislikeVideo
+	post /undislikeVideo (UndislikeVideoReq) returns (UndislikeVideoResp)
 }
