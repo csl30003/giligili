@@ -1,6 +1,6 @@
 Name: chat
 Host: 0.0.0.0
-Port: 8888
+Port: 8001
 
 MySQL:
   DataSource: root:csl_520520@tcp(127.0.0.1:3306)/giligili?charset=utf8mb4&parseTime=True&loc=Asia%2FShanghai
