@@ -17,7 +17,11 @@ type LoginReq struct {
 }
 
 type LoginResp struct {
-	Token string `json:"token"`
+	UserId       int64  `json:"userId"`
+	Nickname     string `json:"nickname"`
+	AccessToken  string `json:"accessToken"`
+	AccessExpire int64  `json:"accessExpire"`
+	RefreshAfter int64  `json:"refreshAfter"`
 }
 
 type GetUserInfoReq struct {
