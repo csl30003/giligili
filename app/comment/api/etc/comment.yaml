@@ -2,12 +2,6 @@ Name: comment
 Host: 0.0.0.0
 Port: 8003
 
-MySQL:
-  DataSource: root:csl_520520@tcp(127.0.0.1:3306)/giligili?charset=utf8mb4&parseTime=True&loc=Asia%2FShanghai
-Cache:
-  - Host: 127.0.0.1:6379
-    Pass: csl_520520
-
 Log:
   ServiceName: user-api
   Mode: file

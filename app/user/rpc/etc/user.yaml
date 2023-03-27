@@ -1,0 +1,21 @@
+Name: user.rpc
+ListenOn: 0.0.0.0:8080
+Etcd:
+  Hosts:
+  - 0.0.0.0:2379
+  Key: user.rpc
+
+Log:
+  ServiceName: user-rpc
+  Mode: file
+  Path: logs
+  Level: info
+  Encoding: plain
+  Compress: true
+  KeepDays: 7
+
+MySQL:
+  DataSource: root:csl_520520@tcp(127.0.0.1:3306)/giligili?charset=utf8mb4&parseTime=True&loc=Asia%2FShanghai
+Cache:
+  - Host: 127.0.0.1:6379
+    Pass: csl_520520

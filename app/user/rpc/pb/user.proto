@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package pb;
+
+option go_package = "./pb";
+
+message RegisterReq {
+  string username = 1;
+  string password = 2;
+  string nickname = 3;
+}
+
+message RegisterResp {
+  int64 userId = 1;
+}
+
+service User {
+  rpc Register (RegisterReq) returns (RegisterResp);
+}
