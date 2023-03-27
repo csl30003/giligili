@@ -6,6 +6,7 @@ import (
 	"giligili/app/user/rpc/internal/svc"
 	"giligili/app/user/rpc/pb"
 	"giligili/app/user/rpc/user"
+	"giligili/common/cryptx"
 	"google.golang.org/grpc/status"
 
 	"github.com/zeromicro/go-zero/core/logx"
@@ -39,7 +40,7 @@ func (l *RegisterLogic) Register(in *pb.RegisterReq) (*pb.RegisterResp, error) {
 	if err == model.ErrNotFound {
 		newUser := model.User{
 			Username: in.Username,
-			Password: in.Password,
+			Password: cryptx.PasswordEncrypt(l.svcCtx.Config.Salt, in.Password),
 			Nickname: in.Nickname,
 		}
 

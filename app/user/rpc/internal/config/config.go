@@ -13,4 +13,5 @@ type Config struct {
 		DataSource string
 	}
 	Cache cache.CacheConf
+	Salt  string
 }

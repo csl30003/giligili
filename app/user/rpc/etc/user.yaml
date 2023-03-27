@@ -19,3 +19,5 @@ MySQL:
 Cache:
   - Host: 127.0.0.1:6379
     Pass: csl_520520
+
+Salt: giligili_salt
