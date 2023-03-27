@@ -15,7 +15,7 @@ type (
         Nickname string `json:"nickname"`
     }
     RegisterResp {
-        UserId int `json:"userId"`
+        UserId int64 `json:"userId"`
     }
 )
 

@@ -8,7 +8,7 @@ type RegisterReq struct {
 }
 
 type RegisterResp struct {
-	UserId int `json:"userId"`
+	UserId int64 `json:"userId"`
 }
 
 type LoginReq struct {

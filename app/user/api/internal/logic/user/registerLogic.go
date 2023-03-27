@@ -2,6 +2,7 @@ package user
 
 import (
 	"context"
+	"giligili/app/user/rpc/user"
 
 	"giligili/app/user/api/internal/svc"
 	"giligili/app/user/api/internal/types"
@@ -24,7 +25,16 @@ func NewRegisterLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Register
 }
 
 func (l *RegisterLogic) Register(req *types.RegisterReq) (resp *types.RegisterResp, err error) {
-	// todo: add your logic here and delete this line
+	registerResp, err := l.svcCtx.UserRpcClient.Register(l.ctx, &user.RegisterReq{
+		Username: req.Username,
+		Password: req.Password,
+		Nickname: req.Nickname,
+	})
+	if err != nil {
+		return nil, err
+	}
 
-	return
+	return &types.RegisterResp{
+		UserId: registerResp.UserId,
+	}, nil
 }
