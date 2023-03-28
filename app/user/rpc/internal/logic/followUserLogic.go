@@ -26,8 +26,19 @@ func NewFollowUserLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Follow
 }
 
 func (l *FollowUserLogic) FollowUser(in *pb.FollowUserReq) (*pb.Empty, error) {
-	// 判断是否存在
-	_, err := l.svcCtx.FollowModel.FindOneByFollowerIdAndFolloweeId(l.ctx, in.UserId, in.FolloweeId)
+	// 判断是否相等
+	if in.UserId == in.FolloweeId {
+		return nil, status.Error(100, "不能关注自己")
+	}
+
+	// 判断用户是否存在
+	_, err := l.svcCtx.UserModel.FindOneById(l.ctx, in.FolloweeId)
+	if err != nil || err == model.ErrNotFound {
+		return nil, status.Error(100, "用户不存在")
+	}
+
+	// 判断关注记录是否存在
+	_, err = l.svcCtx.FollowModel.FindOneByFollowerIdAndFolloweeId(l.ctx, in.UserId, in.FolloweeId)
 	if err == nil {
 		// 找得到记录
 		return nil, status.Error(100, "已关注")
