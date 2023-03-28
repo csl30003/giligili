@@ -3,14 +3,19 @@ Host: 0.0.0.0
 Port: 8001
 
 Log:
-  ServiceName: user-api
+  ServiceName: chat-api
   Mode: file
   Path: logs
   Level: info
   Encoding: plain
-  Compress: true
-  KeepDays: 7
+  KeepDays: 3
 
 Auth:
   AccessSecret: giligili_jwt_key
   AccessExpire: 10800
+
+ChatRpcConf:
+  Etcd:
+    Hosts:
+      - 127.0.0.1:2379
+    Key: chat.rpc

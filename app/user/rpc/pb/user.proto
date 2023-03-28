@@ -12,6 +12,7 @@ service User {
   rpc UnfollowUser (UnfollowUserReq) returns (Empty);
   rpc GetFollowerList (GetFollowerListReq) returns (GetFollowerListResp);
   rpc GetFolloweeList (GetFolloweeListReq) returns (GetFolloweeListResp);
+  rpc IsExist (IsExistReq) returns (IsExistResp);
 }
 
 message Empty {}
@@ -67,4 +68,11 @@ message GetFolloweeListReq {
 }
 message GetFolloweeListResp {
   repeated int64 followeeId = 1;
+}
+
+message IsExistReq {
+  int64 userId = 1;
+}
+message IsExistResp {
+  bool isExist = 1;
 }

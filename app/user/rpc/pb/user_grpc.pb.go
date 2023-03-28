@@ -29,6 +29,7 @@ type UserClient interface {
 	UnfollowUser(ctx context.Context, in *UnfollowUserReq, opts ...grpc.CallOption) (*Empty, error)
 	GetFollowerList(ctx context.Context, in *GetFollowerListReq, opts ...grpc.CallOption) (*GetFollowerListResp, error)
 	GetFolloweeList(ctx context.Context, in *GetFolloweeListReq, opts ...grpc.CallOption) (*GetFolloweeListResp, error)
+	IsExist(ctx context.Context, in *IsExistReq, opts ...grpc.CallOption) (*IsExistResp, error)
 }
 
 type userClient struct {
@@ -102,6 +103,15 @@ func (c *userClient) GetFolloweeList(ctx context.Context, in *GetFolloweeListReq
 	return out, nil
 }
 
+func (c *userClient) IsExist(ctx context.Context, in *IsExistReq, opts ...grpc.CallOption) (*IsExistResp, error) {
+	out := new(IsExistResp)
+	err := c.cc.Invoke(ctx, "/pb.User/IsExist", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // UserServer is the server API for User service.
 // All implementations must embed UnimplementedUserServer
 // for forward compatibility
@@ -113,6 +123,7 @@ type UserServer interface {
 	UnfollowUser(context.Context, *UnfollowUserReq) (*Empty, error)
 	GetFollowerList(context.Context, *GetFollowerListReq) (*GetFollowerListResp, error)
 	GetFolloweeList(context.Context, *GetFolloweeListReq) (*GetFolloweeListResp, error)
+	IsExist(context.Context, *IsExistReq) (*IsExistResp, error)
 	mustEmbedUnimplementedUserServer()
 }
 
@@ -140,6 +151,9 @@ func (UnimplementedUserServer) GetFollowerList(context.Context, *GetFollowerList
 }
 func (UnimplementedUserServer) GetFolloweeList(context.Context, *GetFolloweeListReq) (*GetFolloweeListResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetFolloweeList not implemented")
+}
+func (UnimplementedUserServer) IsExist(context.Context, *IsExistReq) (*IsExistResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method IsExist not implemented")
 }
 func (UnimplementedUserServer) mustEmbedUnimplementedUserServer() {}
 
@@ -280,6 +294,24 @@ func _User_GetFolloweeList_Handler(srv interface{}, ctx context.Context, dec fun
 	return interceptor(ctx, in, info, handler)
 }
 
+func _User_IsExist_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(IsExistReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServer).IsExist(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/pb.User/IsExist",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServer).IsExist(ctx, req.(*IsExistReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // User_ServiceDesc is the grpc.ServiceDesc for User service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -314,6 +346,10 @@ var User_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetFolloweeList",
 			Handler:    _User_GetFolloweeList_Handler,
+		},
+		{
+			MethodName: "IsExist",
+			Handler:    _User_IsExist_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

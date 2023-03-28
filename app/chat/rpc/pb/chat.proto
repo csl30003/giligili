@@ -5,11 +5,9 @@ package pb;
 option go_package = "./pb";
 
 service Chat {
-  rpc SendChatMessage (SendChatMessageReq) returns (Empty);
+  rpc SendChatMessage (SendChatMessageReq) returns (SendChatMessageResp);
   rpc GetChatHistory (GetChatHistoryReq) returns (GetChatHistoryResp);
 }
-
-message Empty {}
 
 message SendChatMessageReq {
   int64 fromUserId = 1;

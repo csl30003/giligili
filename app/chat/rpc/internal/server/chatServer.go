@@ -22,7 +22,7 @@ func NewChatServer(svcCtx *svc.ServiceContext) *ChatServer {
 	}
 }
 
-func (s *ChatServer) SendChatMessage(ctx context.Context, in *pb.SendChatMessageReq) (*pb.Empty, error) {
+func (s *ChatServer) SendChatMessage(ctx context.Context, in *pb.SendChatMessageReq) (*pb.SendChatMessageResp, error) {
 	l := logic.NewSendChatMessageLogic(ctx, s.svcCtx)
 	return l.SendChatMessage(in)
 }

@@ -22,7 +22,7 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ChatClient interface {
-	SendChatMessage(ctx context.Context, in *SendChatMessageReq, opts ...grpc.CallOption) (*Empty, error)
+	SendChatMessage(ctx context.Context, in *SendChatMessageReq, opts ...grpc.CallOption) (*SendChatMessageResp, error)
 	GetChatHistory(ctx context.Context, in *GetChatHistoryReq, opts ...grpc.CallOption) (*GetChatHistoryResp, error)
 }
 
@@ -34,8 +34,8 @@ func NewChatClient(cc grpc.ClientConnInterface) ChatClient {
 	return &chatClient{cc}
 }
 
-func (c *chatClient) SendChatMessage(ctx context.Context, in *SendChatMessageReq, opts ...grpc.CallOption) (*Empty, error) {
-	out := new(Empty)
+func (c *chatClient) SendChatMessage(ctx context.Context, in *SendChatMessageReq, opts ...grpc.CallOption) (*SendChatMessageResp, error) {
+	out := new(SendChatMessageResp)
 	err := c.cc.Invoke(ctx, "/pb.Chat/SendChatMessage", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -56,7 +56,7 @@ func (c *chatClient) GetChatHistory(ctx context.Context, in *GetChatHistoryReq, 
 // All implementations must embed UnimplementedChatServer
 // for forward compatibility
 type ChatServer interface {
-	SendChatMessage(context.Context, *SendChatMessageReq) (*Empty, error)
+	SendChatMessage(context.Context, *SendChatMessageReq) (*SendChatMessageResp, error)
 	GetChatHistory(context.Context, *GetChatHistoryReq) (*GetChatHistoryResp, error)
 	mustEmbedUnimplementedChatServer()
 }
@@ -65,7 +65,7 @@ type ChatServer interface {
 type UnimplementedChatServer struct {
 }
 
-func (UnimplementedChatServer) SendChatMessage(context.Context, *SendChatMessageReq) (*Empty, error) {
+func (UnimplementedChatServer) SendChatMessage(context.Context, *SendChatMessageReq) (*SendChatMessageResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SendChatMessage not implemented")
 }
 func (UnimplementedChatServer) GetChatHistory(context.Context, *GetChatHistoryReq) (*GetChatHistoryResp, error) {

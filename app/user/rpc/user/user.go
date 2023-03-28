@@ -21,6 +21,8 @@ type (
 	GetFollowerListResp = pb.GetFollowerListResp
 	GetUserInfoReq      = pb.GetUserInfoReq
 	GetUserInfoResp     = pb.GetUserInfoResp
+	IsExistReq          = pb.IsExistReq
+	IsExistResp         = pb.IsExistResp
 	LoginReq            = pb.LoginReq
 	LoginResp           = pb.LoginResp
 	RegisterReq         = pb.RegisterReq
@@ -35,6 +37,7 @@ type (
 		UnfollowUser(ctx context.Context, in *UnfollowUserReq, opts ...grpc.CallOption) (*Empty, error)
 		GetFollowerList(ctx context.Context, in *GetFollowerListReq, opts ...grpc.CallOption) (*GetFollowerListResp, error)
 		GetFolloweeList(ctx context.Context, in *GetFolloweeListReq, opts ...grpc.CallOption) (*GetFolloweeListResp, error)
+		IsExist(ctx context.Context, in *IsExistReq, opts ...grpc.CallOption) (*IsExistResp, error)
 	}
 
 	defaultUser struct {
@@ -81,4 +84,9 @@ func (m *defaultUser) GetFollowerList(ctx context.Context, in *GetFollowerListRe
 func (m *defaultUser) GetFolloweeList(ctx context.Context, in *GetFolloweeListReq, opts ...grpc.CallOption) (*GetFolloweeListResp, error) {
 	client := pb.NewUserClient(m.cli.Conn())
 	return client.GetFolloweeList(ctx, in, opts...)
+}
+
+func (m *defaultUser) IsExist(ctx context.Context, in *IsExistReq, opts ...grpc.CallOption) (*IsExistResp, error) {
+	client := pb.NewUserClient(m.cli.Conn())
+	return client.IsExist(ctx, in, opts...)
 }

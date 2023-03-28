@@ -14,14 +14,13 @@ import (
 
 type (
 	ChatMessage         = pb.ChatMessage
-	Empty               = pb.Empty
 	GetChatHistoryReq   = pb.GetChatHistoryReq
 	GetChatHistoryResp  = pb.GetChatHistoryResp
 	SendChatMessageReq  = pb.SendChatMessageReq
 	SendChatMessageResp = pb.SendChatMessageResp
 
 	Chat interface {
-		SendChatMessage(ctx context.Context, in *SendChatMessageReq, opts ...grpc.CallOption) (*Empty, error)
+		SendChatMessage(ctx context.Context, in *SendChatMessageReq, opts ...grpc.CallOption) (*SendChatMessageResp, error)
 		GetChatHistory(ctx context.Context, in *GetChatHistoryReq, opts ...grpc.CallOption) (*GetChatHistoryResp, error)
 	}
 
@@ -36,7 +35,7 @@ func NewChat(cli zrpc.Client) Chat {
 	}
 }
 
-func (m *defaultChat) SendChatMessage(ctx context.Context, in *SendChatMessageReq, opts ...grpc.CallOption) (*Empty, error) {
+func (m *defaultChat) SendChatMessage(ctx context.Context, in *SendChatMessageReq, opts ...grpc.CallOption) (*SendChatMessageResp, error) {
 	client := pb.NewChatClient(m.cli.Conn())
 	return client.SendChatMessage(ctx, in, opts...)
 }

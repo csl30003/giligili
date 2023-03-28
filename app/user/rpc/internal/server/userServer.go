@@ -56,3 +56,8 @@ func (s *UserServer) GetFolloweeList(ctx context.Context, in *pb.GetFolloweeList
 	l := logic.NewGetFolloweeListLogic(ctx, s.svcCtx)
 	return l.GetFolloweeList(in)
 }
+
+func (s *UserServer) IsExist(ctx context.Context, in *pb.IsExistReq) (*pb.IsExistResp, error) {
+	l := logic.NewIsExistLogic(ctx, s.svcCtx)
+	return l.IsExist(in)
+}
