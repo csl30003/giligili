@@ -27,7 +27,7 @@ func NewUnfollowUserLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Unfo
 }
 
 // UnfollowUser 取关用户
-func (l *UnfollowUserLogic) UnfollowUser(in *pb.UnfollowUserReq) (*pb.Empty, error) {
+func (l *UnfollowUserLogic) UnfollowUser(in *pb.UnfollowUserReq) (*pb.UnfollowUserResp, error) {
 	// 判断是否相等
 	if in.UserId == in.FolloweeId {
 		return nil, status.Error(100, "不能取关自己")
@@ -48,5 +48,5 @@ func (l *UnfollowUserLogic) UnfollowUser(in *pb.UnfollowUserReq) (*pb.Empty, err
 		return nil, status.Error(100, "取关失败")
 	}
 
-	return &pb.Empty{}, nil
+	return &pb.UnfollowUserResp{}, nil
 }

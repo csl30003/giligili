@@ -8,14 +8,12 @@ service User {
   rpc Register (RegisterReq) returns (RegisterResp);
   rpc Login (LoginReq) returns (LoginResp);
   rpc GetUserInfo (GetUserInfoReq) returns (GetUserInfoResp);
-  rpc FollowUser (FollowUserReq) returns (Empty);
-  rpc UnfollowUser (UnfollowUserReq) returns (Empty);
+  rpc FollowUser (FollowUserReq) returns (FollowUserResp);
+  rpc UnfollowUser (UnfollowUserReq) returns (UnfollowUserResp);
   rpc GetFollowerList (GetFollowerListReq) returns (GetFollowerListResp);
   rpc GetFolloweeList (GetFolloweeListReq) returns (GetFolloweeListResp);
   rpc IsExist (IsExistReq) returns (IsExistResp);
 }
-
-message Empty {}
 
 message RegisterReq {
   string username = 1;
@@ -50,11 +48,13 @@ message FollowUserReq {
   int64 userId = 1;
   int64 followeeId = 2;
 }
+message FollowUserResp{}
 
 message UnfollowUserReq {
   int64 userId = 1;
   int64 followeeId = 2;
 }
+message UnfollowUserResp{}
 
 message GetFollowerListReq {
   int64 userId = 1;

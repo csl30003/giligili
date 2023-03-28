@@ -13,8 +13,8 @@ import (
 )
 
 type (
-	Empty               = pb.Empty
 	FollowUserReq       = pb.FollowUserReq
+	FollowUserResp      = pb.FollowUserResp
 	GetFolloweeListReq  = pb.GetFolloweeListReq
 	GetFolloweeListResp = pb.GetFolloweeListResp
 	GetFollowerListReq  = pb.GetFollowerListReq
@@ -28,13 +28,14 @@ type (
 	RegisterReq         = pb.RegisterReq
 	RegisterResp        = pb.RegisterResp
 	UnfollowUserReq     = pb.UnfollowUserReq
+	UnfollowUserResp    = pb.UnfollowUserResp
 
 	User interface {
 		Register(ctx context.Context, in *RegisterReq, opts ...grpc.CallOption) (*RegisterResp, error)
 		Login(ctx context.Context, in *LoginReq, opts ...grpc.CallOption) (*LoginResp, error)
 		GetUserInfo(ctx context.Context, in *GetUserInfoReq, opts ...grpc.CallOption) (*GetUserInfoResp, error)
-		FollowUser(ctx context.Context, in *FollowUserReq, opts ...grpc.CallOption) (*Empty, error)
-		UnfollowUser(ctx context.Context, in *UnfollowUserReq, opts ...grpc.CallOption) (*Empty, error)
+		FollowUser(ctx context.Context, in *FollowUserReq, opts ...grpc.CallOption) (*FollowUserResp, error)
+		UnfollowUser(ctx context.Context, in *UnfollowUserReq, opts ...grpc.CallOption) (*UnfollowUserResp, error)
 		GetFollowerList(ctx context.Context, in *GetFollowerListReq, opts ...grpc.CallOption) (*GetFollowerListResp, error)
 		GetFolloweeList(ctx context.Context, in *GetFolloweeListReq, opts ...grpc.CallOption) (*GetFolloweeListResp, error)
 		IsExist(ctx context.Context, in *IsExistReq, opts ...grpc.CallOption) (*IsExistResp, error)
@@ -66,12 +67,12 @@ func (m *defaultUser) GetUserInfo(ctx context.Context, in *GetUserInfoReq, opts 
 	return client.GetUserInfo(ctx, in, opts...)
 }
 
-func (m *defaultUser) FollowUser(ctx context.Context, in *FollowUserReq, opts ...grpc.CallOption) (*Empty, error) {
+func (m *defaultUser) FollowUser(ctx context.Context, in *FollowUserReq, opts ...grpc.CallOption) (*FollowUserResp, error) {
 	client := pb.NewUserClient(m.cli.Conn())
 	return client.FollowUser(ctx, in, opts...)
 }
 
-func (m *defaultUser) UnfollowUser(ctx context.Context, in *UnfollowUserReq, opts ...grpc.CallOption) (*Empty, error) {
+func (m *defaultUser) UnfollowUser(ctx context.Context, in *UnfollowUserReq, opts ...grpc.CallOption) (*UnfollowUserResp, error) {
 	client := pb.NewUserClient(m.cli.Conn())
 	return client.UnfollowUser(ctx, in, opts...)
 }

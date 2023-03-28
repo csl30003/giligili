@@ -25,8 +25,8 @@ type UserClient interface {
 	Register(ctx context.Context, in *RegisterReq, opts ...grpc.CallOption) (*RegisterResp, error)
 	Login(ctx context.Context, in *LoginReq, opts ...grpc.CallOption) (*LoginResp, error)
 	GetUserInfo(ctx context.Context, in *GetUserInfoReq, opts ...grpc.CallOption) (*GetUserInfoResp, error)
-	FollowUser(ctx context.Context, in *FollowUserReq, opts ...grpc.CallOption) (*Empty, error)
-	UnfollowUser(ctx context.Context, in *UnfollowUserReq, opts ...grpc.CallOption) (*Empty, error)
+	FollowUser(ctx context.Context, in *FollowUserReq, opts ...grpc.CallOption) (*FollowUserResp, error)
+	UnfollowUser(ctx context.Context, in *UnfollowUserReq, opts ...grpc.CallOption) (*UnfollowUserResp, error)
 	GetFollowerList(ctx context.Context, in *GetFollowerListReq, opts ...grpc.CallOption) (*GetFollowerListResp, error)
 	GetFolloweeList(ctx context.Context, in *GetFolloweeListReq, opts ...grpc.CallOption) (*GetFolloweeListResp, error)
 	IsExist(ctx context.Context, in *IsExistReq, opts ...grpc.CallOption) (*IsExistResp, error)
@@ -67,8 +67,8 @@ func (c *userClient) GetUserInfo(ctx context.Context, in *GetUserInfoReq, opts .
 	return out, nil
 }
 
-func (c *userClient) FollowUser(ctx context.Context, in *FollowUserReq, opts ...grpc.CallOption) (*Empty, error) {
-	out := new(Empty)
+func (c *userClient) FollowUser(ctx context.Context, in *FollowUserReq, opts ...grpc.CallOption) (*FollowUserResp, error) {
+	out := new(FollowUserResp)
 	err := c.cc.Invoke(ctx, "/pb.User/FollowUser", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -76,8 +76,8 @@ func (c *userClient) FollowUser(ctx context.Context, in *FollowUserReq, opts ...
 	return out, nil
 }
 
-func (c *userClient) UnfollowUser(ctx context.Context, in *UnfollowUserReq, opts ...grpc.CallOption) (*Empty, error) {
-	out := new(Empty)
+func (c *userClient) UnfollowUser(ctx context.Context, in *UnfollowUserReq, opts ...grpc.CallOption) (*UnfollowUserResp, error) {
+	out := new(UnfollowUserResp)
 	err := c.cc.Invoke(ctx, "/pb.User/UnfollowUser", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -119,8 +119,8 @@ type UserServer interface {
 	Register(context.Context, *RegisterReq) (*RegisterResp, error)
 	Login(context.Context, *LoginReq) (*LoginResp, error)
 	GetUserInfo(context.Context, *GetUserInfoReq) (*GetUserInfoResp, error)
-	FollowUser(context.Context, *FollowUserReq) (*Empty, error)
-	UnfollowUser(context.Context, *UnfollowUserReq) (*Empty, error)
+	FollowUser(context.Context, *FollowUserReq) (*FollowUserResp, error)
+	UnfollowUser(context.Context, *UnfollowUserReq) (*UnfollowUserResp, error)
 	GetFollowerList(context.Context, *GetFollowerListReq) (*GetFollowerListResp, error)
 	GetFolloweeList(context.Context, *GetFolloweeListReq) (*GetFolloweeListResp, error)
 	IsExist(context.Context, *IsExistReq) (*IsExistResp, error)
@@ -140,10 +140,10 @@ func (UnimplementedUserServer) Login(context.Context, *LoginReq) (*LoginResp, er
 func (UnimplementedUserServer) GetUserInfo(context.Context, *GetUserInfoReq) (*GetUserInfoResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetUserInfo not implemented")
 }
-func (UnimplementedUserServer) FollowUser(context.Context, *FollowUserReq) (*Empty, error) {
+func (UnimplementedUserServer) FollowUser(context.Context, *FollowUserReq) (*FollowUserResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method FollowUser not implemented")
 }
-func (UnimplementedUserServer) UnfollowUser(context.Context, *UnfollowUserReq) (*Empty, error) {
+func (UnimplementedUserServer) UnfollowUser(context.Context, *UnfollowUserReq) (*UnfollowUserResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UnfollowUser not implemented")
 }
 func (UnimplementedUserServer) GetFollowerList(context.Context, *GetFollowerListReq) (*GetFollowerListResp, error) {

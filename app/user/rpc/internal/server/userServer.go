@@ -37,12 +37,12 @@ func (s *UserServer) GetUserInfo(ctx context.Context, in *pb.GetUserInfoReq) (*p
 	return l.GetUserInfo(in)
 }
 
-func (s *UserServer) FollowUser(ctx context.Context, in *pb.FollowUserReq) (*pb.Empty, error) {
+func (s *UserServer) FollowUser(ctx context.Context, in *pb.FollowUserReq) (*pb.FollowUserResp, error) {
 	l := logic.NewFollowUserLogic(ctx, s.svcCtx)
 	return l.FollowUser(in)
 }
 
-func (s *UserServer) UnfollowUser(ctx context.Context, in *pb.UnfollowUserReq) (*pb.Empty, error) {
+func (s *UserServer) UnfollowUser(ctx context.Context, in *pb.UnfollowUserReq) (*pb.UnfollowUserResp, error) {
 	l := logic.NewUnfollowUserLogic(ctx, s.svcCtx)
 	return l.UnfollowUser(in)
 }

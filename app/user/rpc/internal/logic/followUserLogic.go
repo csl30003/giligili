@@ -26,7 +26,7 @@ func NewFollowUserLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Follow
 }
 
 // FollowUser 关注用户
-func (l *FollowUserLogic) FollowUser(in *pb.FollowUserReq) (*pb.Empty, error) {
+func (l *FollowUserLogic) FollowUser(in *pb.FollowUserReq) (*pb.FollowUserResp, error) {
 	// 判断是否相等
 	if in.UserId == in.FolloweeId {
 		return nil, status.Error(100, "不能关注自己")
@@ -62,7 +62,7 @@ func (l *FollowUserLogic) FollowUser(in *pb.FollowUserReq) (*pb.Empty, error) {
 			return nil, status.Error(100, err.Error())
 		}
 
-		return &user.Empty{}, nil
+		return &user.FollowUserResp{}, nil
 	}
 
 	return nil, status.Error(100, err.Error())
