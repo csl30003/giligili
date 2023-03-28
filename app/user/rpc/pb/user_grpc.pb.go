@@ -27,6 +27,8 @@ type UserClient interface {
 	GetUserInfo(ctx context.Context, in *GetUserInfoReq, opts ...grpc.CallOption) (*GetUserInfoResp, error)
 	FollowUser(ctx context.Context, in *FollowUserReq, opts ...grpc.CallOption) (*Empty, error)
 	UnfollowUser(ctx context.Context, in *UnfollowUserReq, opts ...grpc.CallOption) (*Empty, error)
+	GetFollowerList(ctx context.Context, in *GetFollowerListReq, opts ...grpc.CallOption) (*GetFollowerListResp, error)
+	GetFolloweeList(ctx context.Context, in *GetFolloweeListReq, opts ...grpc.CallOption) (*GetFolloweeListResp, error)
 }
 
 type userClient struct {
@@ -82,6 +84,24 @@ func (c *userClient) UnfollowUser(ctx context.Context, in *UnfollowUserReq, opts
 	return out, nil
 }
 
+func (c *userClient) GetFollowerList(ctx context.Context, in *GetFollowerListReq, opts ...grpc.CallOption) (*GetFollowerListResp, error) {
+	out := new(GetFollowerListResp)
+	err := c.cc.Invoke(ctx, "/pb.User/GetFollowerList", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userClient) GetFolloweeList(ctx context.Context, in *GetFolloweeListReq, opts ...grpc.CallOption) (*GetFolloweeListResp, error) {
+	out := new(GetFolloweeListResp)
+	err := c.cc.Invoke(ctx, "/pb.User/GetFolloweeList", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // UserServer is the server API for User service.
 // All implementations must embed UnimplementedUserServer
 // for forward compatibility
@@ -91,6 +111,8 @@ type UserServer interface {
 	GetUserInfo(context.Context, *GetUserInfoReq) (*GetUserInfoResp, error)
 	FollowUser(context.Context, *FollowUserReq) (*Empty, error)
 	UnfollowUser(context.Context, *UnfollowUserReq) (*Empty, error)
+	GetFollowerList(context.Context, *GetFollowerListReq) (*GetFollowerListResp, error)
+	GetFolloweeList(context.Context, *GetFolloweeListReq) (*GetFolloweeListResp, error)
 	mustEmbedUnimplementedUserServer()
 }
 
@@ -112,6 +134,12 @@ func (UnimplementedUserServer) FollowUser(context.Context, *FollowUserReq) (*Emp
 }
 func (UnimplementedUserServer) UnfollowUser(context.Context, *UnfollowUserReq) (*Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UnfollowUser not implemented")
+}
+func (UnimplementedUserServer) GetFollowerList(context.Context, *GetFollowerListReq) (*GetFollowerListResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetFollowerList not implemented")
+}
+func (UnimplementedUserServer) GetFolloweeList(context.Context, *GetFolloweeListReq) (*GetFolloweeListResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetFolloweeList not implemented")
 }
 func (UnimplementedUserServer) mustEmbedUnimplementedUserServer() {}
 
@@ -216,6 +244,42 @@ func _User_UnfollowUser_Handler(srv interface{}, ctx context.Context, dec func(i
 	return interceptor(ctx, in, info, handler)
 }
 
+func _User_GetFollowerList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetFollowerListReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServer).GetFollowerList(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/pb.User/GetFollowerList",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServer).GetFollowerList(ctx, req.(*GetFollowerListReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _User_GetFolloweeList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetFolloweeListReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServer).GetFolloweeList(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/pb.User/GetFolloweeList",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServer).GetFolloweeList(ctx, req.(*GetFolloweeListReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // User_ServiceDesc is the grpc.ServiceDesc for User service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -242,6 +306,14 @@ var User_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UnfollowUser",
 			Handler:    _User_UnfollowUser_Handler,
+		},
+		{
+			MethodName: "GetFollowerList",
+			Handler:    _User_GetFollowerList_Handler,
+		},
+		{
+			MethodName: "GetFolloweeList",
+			Handler:    _User_GetFolloweeList_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

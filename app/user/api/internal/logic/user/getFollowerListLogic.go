@@ -2,6 +2,8 @@ package user
 
 import (
 	"context"
+	"giligili/app/user/rpc/user"
+	"giligili/common/ctxData"
 
 	"giligili/app/user/api/internal/svc"
 	"giligili/app/user/api/internal/types"
@@ -28,5 +30,16 @@ func (l *GetFollowerListLogic) GetFollowerList(req *types.GetFollowerListReq) (r
 	// 用于忽略警告
 	_ = req
 
-	return
+	userId := ctxData.GetUserIdFromCtx(l.ctx)
+
+	getFollowerListresp, err := l.svcCtx.UserRpcClient.GetFollowerList(l.ctx, &user.GetFollowerListReq{
+		UserId: userId,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return &types.GetFollowerListResp{
+		FollowerList: getFollowerListresp.FollowerId,
+	}, nil
 }

@@ -46,3 +46,13 @@ func (s *UserServer) UnfollowUser(ctx context.Context, in *pb.UnfollowUserReq) (
 	l := logic.NewUnfollowUserLogic(ctx, s.svcCtx)
 	return l.UnfollowUser(in)
 }
+
+func (s *UserServer) GetFollowerList(ctx context.Context, in *pb.GetFollowerListReq) (*pb.GetFollowerListResp, error) {
+	l := logic.NewGetFollowerListLogic(ctx, s.svcCtx)
+	return l.GetFollowerList(in)
+}
+
+func (s *UserServer) GetFolloweeList(ctx context.Context, in *pb.GetFolloweeListReq) (*pb.GetFolloweeListResp, error) {
+	l := logic.NewGetFolloweeListLogic(ctx, s.svcCtx)
+	return l.GetFolloweeList(in)
+}
