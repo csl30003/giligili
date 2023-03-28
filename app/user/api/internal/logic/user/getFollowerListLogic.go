@@ -32,7 +32,7 @@ func (l *GetFollowerListLogic) GetFollowerList(req *types.GetFollowerListReq) (r
 
 	userId := ctxData.GetUserIdFromCtx(l.ctx)
 
-	getFollowerListresp, err := l.svcCtx.UserRpcClient.GetFollowerList(l.ctx, &user.GetFollowerListReq{
+	getFollowerListResp, err := l.svcCtx.UserRpcClient.GetFollowerList(l.ctx, &user.GetFollowerListReq{
 		UserId: userId,
 	})
 	if err != nil {
@@ -40,6 +40,6 @@ func (l *GetFollowerListLogic) GetFollowerList(req *types.GetFollowerListReq) (r
 	}
 
 	return &types.GetFollowerListResp{
-		FollowerList: getFollowerListresp.FollowerId,
+		FollowerList: getFollowerListResp.FollowerId,
 	}, nil
 }

@@ -2,6 +2,8 @@ package logic
 
 import (
 	"context"
+	"giligili/app/user/model"
+	"google.golang.org/grpc/status"
 
 	"giligili/app/user/rpc/internal/svc"
 	"giligili/app/user/rpc/pb"
@@ -23,8 +25,22 @@ func NewGetFolloweeListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *G
 	}
 }
 
+// GetFolloweeList 获取关注我的用户列表，目前只获取 id
 func (l *GetFolloweeListLogic) GetFolloweeList(in *pb.GetFolloweeListReq) (*pb.GetFolloweeListResp, error) {
-	// todo: add your logic here and delete this line
+	followList, err := l.svcCtx.FollowModel.FindManyByFollowerId(l.ctx, in.UserId)
+	if err == model.ErrNotFound {
+		return nil, status.Error(100, "你没关注任何人")
+	}
+	if err != nil {
+		return nil, status.Error(100, "查询关注错误")
+	}
 
-	return &pb.GetFolloweeListResp{}, nil
+	userIdList := make([]int64, len(followList))
+	for i := range followList {
+		userIdList[i] = followList[i].FolloweeId
+	}
+
+	return &pb.GetFolloweeListResp{
+		FolloweeId: userIdList,
+	}, nil
 }

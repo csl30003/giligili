@@ -17,6 +17,7 @@ type (
 		followModel
 		FindOneByFollowerIdAndFolloweeId(ctx context.Context, followerId, followeeId int64) (*Follow, error)
 		FindManyByFolloweeId(ctx context.Context, followeeId int64) ([]*Follow, error)
+		FindManyByFollowerId(ctx context.Context, followerId int64) ([]*Follow, error)
 	}
 
 	customFollowModel struct {
@@ -51,6 +52,21 @@ func (c *customFollowModel) FindManyByFolloweeId(ctx context.Context, followeeId
 	followList := make([]*Follow, 0)
 	query := fmt.Sprintf("select %s from %s where `followee_id` = ? and `delete_time` is null", followRows, c.table)
 	err := c.QueryRowsNoCacheCtx(ctx, &followList, query, followeeId)
+	switch err {
+	case nil:
+		return followList, nil
+	case sqlc.ErrNotFound:
+		return nil, ErrNotFound
+	default:
+		return nil, err
+	}
+}
+
+// FindManyByFollowerId 通过关注者 id 获取被关注记录列表
+func (c *customFollowModel) FindManyByFollowerId(ctx context.Context, followerId int64) ([]*Follow, error) {
+	followList := make([]*Follow, 0)
+	query := fmt.Sprintf("select %s from %s where `follower_id` = ? and `delete_time` is null", followRows, c.table)
+	err := c.QueryRowsNoCacheCtx(ctx, &followList, query, followerId)
 	switch err {
 	case nil:
 		return followList, nil

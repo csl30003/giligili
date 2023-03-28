@@ -29,7 +29,7 @@ func NewGetFollowerListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *G
 func (l *GetFollowerListLogic) GetFollowerList(in *pb.GetFollowerListReq) (*pb.GetFollowerListResp, error) {
 	followList, err := l.svcCtx.FollowModel.FindManyByFolloweeId(l.ctx, in.UserId)
 	if err == model.ErrNotFound {
-		return nil, status.Error(100, "没用人关注你")
+		return nil, status.Error(100, "没有人关注你")
 	}
 	if err != nil {
 		return nil, status.Error(100, "查询关注错误")
