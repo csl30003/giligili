@@ -2,6 +2,8 @@ package user
 
 import (
 	"context"
+	"giligili/app/user/rpc/user"
+	"giligili/common/ctxData"
 
 	"giligili/app/user/api/internal/svc"
 	"giligili/app/user/api/internal/types"
@@ -24,7 +26,15 @@ func NewUnfollowUserLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Unfo
 }
 
 func (l *UnfollowUserLogic) UnfollowUser(req *types.UnfollowUserReq) (resp *types.UnfollowUserResp, err error) {
-	// todo: add your logic here and delete this line
+	userId := ctxData.GetUserIdFromCtx(l.ctx)
 
-	return
+	_, err = l.svcCtx.UserRpcClient.UnfollowUser(l.ctx, &user.UnfollowUserReq{
+		UserId:     userId,
+		FolloweeId: req.FolloweeId,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return &types.UnfollowUserResp{}, nil
 }

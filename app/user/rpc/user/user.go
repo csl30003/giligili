@@ -21,12 +21,14 @@ type (
 	LoginResp       = pb.LoginResp
 	RegisterReq     = pb.RegisterReq
 	RegisterResp    = pb.RegisterResp
+	UnfollowUserReq = pb.UnfollowUserReq
 
 	User interface {
 		Register(ctx context.Context, in *RegisterReq, opts ...grpc.CallOption) (*RegisterResp, error)
 		Login(ctx context.Context, in *LoginReq, opts ...grpc.CallOption) (*LoginResp, error)
 		GetUserInfo(ctx context.Context, in *GetUserInfoReq, opts ...grpc.CallOption) (*GetUserInfoResp, error)
 		FollowUser(ctx context.Context, in *FollowUserReq, opts ...grpc.CallOption) (*Empty, error)
+		UnfollowUser(ctx context.Context, in *UnfollowUserReq, opts ...grpc.CallOption) (*Empty, error)
 	}
 
 	defaultUser struct {
@@ -58,4 +60,9 @@ func (m *defaultUser) GetUserInfo(ctx context.Context, in *GetUserInfoReq, opts 
 func (m *defaultUser) FollowUser(ctx context.Context, in *FollowUserReq, opts ...grpc.CallOption) (*Empty, error) {
 	client := pb.NewUserClient(m.cli.Conn())
 	return client.FollowUser(ctx, in, opts...)
+}
+
+func (m *defaultUser) UnfollowUser(ctx context.Context, in *UnfollowUserReq, opts ...grpc.CallOption) (*Empty, error) {
+	client := pb.NewUserClient(m.cli.Conn())
+	return client.UnfollowUser(ctx, in, opts...)
 }

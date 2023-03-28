@@ -41,3 +41,8 @@ func (s *UserServer) FollowUser(ctx context.Context, in *pb.FollowUserReq) (*pb.
 	l := logic.NewFollowUserLogic(ctx, s.svcCtx)
 	return l.FollowUser(in)
 }
+
+func (s *UserServer) UnfollowUser(ctx context.Context, in *pb.UnfollowUserReq) (*pb.Empty, error) {
+	l := logic.NewUnfollowUserLogic(ctx, s.svcCtx)
+	return l.UnfollowUser(in)
+}
