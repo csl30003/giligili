@@ -10,7 +10,7 @@ info(
 
 type (
     SendChatMessageReq {
-        ToUserId int `json:"toUserId"`
+        ToUserId int64 `json:"toUserId"`
         Content string `json:"content"`
     }
     SendChatMessageResp {}
@@ -18,7 +18,7 @@ type (
 
 type (
     GetChatHistoryReq {
-        UserId int `json:"userId"`
+        ToUserId int64 `json:"toUserId"`
     }
     GetChatHistoryResp {
         ChatHistory []ChatMessage `json:"chatHistory"`
@@ -27,9 +27,9 @@ type (
 
 type (
     ChatMessage {
-        FromUserId int `json:"fromUserId"`
+        FromUserId int64 `json:"fromUserId"`
         FromUserNickname string `json:"fromUserNickname"`
-        ToUserId int `json:"toUserId"`
+        ToUserId int64 `json:"toUserId"`
         ToUserNickname string `json:"toUserNickname"`
         Content string `json:"content"`
         CreateTime string `json:"createTime"`

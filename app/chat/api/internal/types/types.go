@@ -2,7 +2,7 @@
 package types
 
 type SendChatMessageReq struct {
-	ToUserId int    `json:"toUserId"`
+	ToUserId int64  `json:"toUserId"`
 	Content  string `json:"content"`
 }
 
@@ -10,7 +10,7 @@ type SendChatMessageResp struct {
 }
 
 type GetChatHistoryReq struct {
-	UserId int `json:"userId"`
+	ToUserId int64 `json:"toUserId"`
 }
 
 type GetChatHistoryResp struct {
@@ -18,9 +18,9 @@ type GetChatHistoryResp struct {
 }
 
 type ChatMessage struct {
-	FromUserId       int    `json:"fromUserId"`
+	FromUserId       int64  `json:"fromUserId"`
 	FromUserNickname string `json:"fromUserNickname"`
-	ToUserId         int    `json:"toUserId"`
+	ToUserId         int64  `json:"toUserId"`
 	ToUserNickname   string `json:"toUserNickname"`
 	Content          string `json:"content"`
 	CreateTime       string `json:"createTime"`

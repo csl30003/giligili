@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+package pb;
+
+option go_package = "./pb";
+
+service Chat {
+  rpc SendChatMessage (SendChatMessageReq) returns (Empty);
+  rpc GetChatHistory (GetChatHistoryReq) returns (GetChatHistoryResp);
+}
+
+message Empty {}
+
+message SendChatMessageReq {
+  int64 fromUserId = 1;
+  int64 toUserId = 2;
+  string content = 3;
+}
+message SendChatMessageResp {}
+
+message GetChatHistoryReq {
+  int64 fromUserId = 1;
+  int64 toUserId = 2;
+}
+message GetChatHistoryResp {
+  repeated ChatMessage chatHistory = 1;
+}
+
+message ChatMessage {
+  int64 fromUserId = 1;
+  string fromUserNickname = 2;
+  int64 toUserId = 3;
+  string toUserNickname = 4;
+  string content = 5;
+  string createTime = 6;
+}
