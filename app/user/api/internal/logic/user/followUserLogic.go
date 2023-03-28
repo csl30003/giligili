@@ -25,6 +25,7 @@ func NewFollowUserLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Follow
 	}
 }
 
+// FollowUser 关注用户
 func (l *FollowUserLogic) FollowUser(req *types.FollowUserReq) (resp *types.FollowUserResp, err error) {
 	userId := ctxData.GetUserIdFromCtx(l.ctx)
 

@@ -25,6 +25,7 @@ func NewUnfollowUserLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Unfo
 	}
 }
 
+// UnfollowUser 取关用户
 func (l *UnfollowUserLogic) UnfollowUser(req *types.UnfollowUserReq) (resp *types.UnfollowUserResp, err error) {
 	userId := ctxData.GetUserIdFromCtx(l.ctx)
 

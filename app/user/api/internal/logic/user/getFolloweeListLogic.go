@@ -23,8 +23,10 @@ func NewGetFolloweeListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *G
 	}
 }
 
+// GetFolloweeList 获取我关注的用户列表，目前只获取 id
 func (l *GetFolloweeListLogic) GetFolloweeList(req *types.GetFolloweeListReq) (resp *types.GetFolloweeListResp, err error) {
-	// todo: add your logic here and delete this line
+	// 用于忽略警告
+	_ = req
 
 	return
 }

@@ -24,6 +24,7 @@ func NewRegisterLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Register
 	}
 }
 
+// Register 注册
 func (l *RegisterLogic) Register(req *types.RegisterReq) (resp *types.RegisterResp, err error) {
 	registerResp, err := l.svcCtx.UserRpcClient.Register(l.ctx, &user.RegisterReq{
 		Username: req.Username,

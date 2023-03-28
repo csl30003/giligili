@@ -25,7 +25,11 @@ func NewGetUserInfoLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetUs
 	}
 }
 
+// GetUserInfo 获取用户信息
 func (l *GetUserInfoLogic) GetUserInfo(req *types.GetUserInfoReq) (resp *types.GetUserInfoResp, err error) {
+	// 用于忽略警告
+	_ = req
+
 	userId := ctxData.GetUserIdFromCtx(l.ctx)
 
 	getUserInfoResp, err := l.svcCtx.UserRpcClient.GetUserInfo(l.ctx, &user.GetUserInfoReq{
