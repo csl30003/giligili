@@ -45,34 +45,29 @@ type (
 )
 
 type (
-    LogoutReq {}
-    LogoutResp {}
-)
-
-type (
     GetFollowerListReq {}
     GetFollowerListResp {
-        FollowerList []int `json:"followerList"`
+        FollowerList []int64 `json:"followerList"`
     }
 )
 
 type (
     GetFolloweeListReq {}
     GetFolloweeListResp {
-        FolloweeList []int `json:"followeeList"`
+        FolloweeList []int64 `json:"followeeList"`
     }
 )
 
 type (
     FollowUserReq {
-        FolloweeId int `json:"followeeId"`
+        FolloweeId int64 `json:"followeeId"`
     }
     FollowUserResp {}
 )
 
 type (
     UnfollowUserReq {
-        FolloweeId int `json:"followeeId"`
+        FolloweeId int64 `json:"followeeId"`
     }
     UnfollowUserResp {}
 )

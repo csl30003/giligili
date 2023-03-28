@@ -8,6 +8,7 @@ service User {
   rpc Register (RegisterReq) returns (RegisterResp);
   rpc Login (LoginReq) returns (LoginResp);
   rpc GetUserInfo (GetUserInfoReq) returns (GetUserInfoResp);
+  rpc FollowUser (FollowUserReq) returns (Empty);
 }
 
 message RegisterReq {
@@ -38,3 +39,9 @@ message GetUserInfoResp {
   string phone = 4;
   string avatar = 5;
 }
+
+message FollowUserReq {
+  int64 userId = 1;
+  int64 followeeId = 2;
+}
+message Empty {}

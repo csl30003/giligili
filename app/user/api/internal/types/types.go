@@ -35,35 +35,29 @@ type GetUserInfoResp struct {
 	Avatar   string `json:"avatar"`
 }
 
-type LogoutReq struct {
-}
-
-type LogoutResp struct {
-}
-
 type GetFollowerListReq struct {
 }
 
 type GetFollowerListResp struct {
-	FollowerList []int `json:"followerList"`
+	FollowerList []int64 `json:"followerList"`
 }
 
 type GetFolloweeListReq struct {
 }
 
 type GetFolloweeListResp struct {
-	FolloweeList []int `json:"followeeList"`
+	FolloweeList []int64 `json:"followeeList"`
 }
 
 type FollowUserReq struct {
-	FolloweeId int `json:"followeeId"`
+	FolloweeId int64 `json:"followeeId"`
 }
 
 type FollowUserResp struct {
 }
 
 type UnfollowUserReq struct {
-	FolloweeId int `json:"followeeId"`
+	FolloweeId int64 `json:"followeeId"`
 }
 
 type UnfollowUserResp struct {

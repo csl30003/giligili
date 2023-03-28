@@ -41,11 +41,6 @@ service user {
 	@handler getUserInfo
 	get /userInfo (GetUserInfoReq) returns (GetUserInfoResp)
 	
-	// 退出登录
-	@doc "logout"
-	@handler logout
-	post /logout (LogoutReq) returns (LogoutResp)
-	
 	// 获取关注者列表
 	@doc "get follower list"
 	@handler getFollowerList

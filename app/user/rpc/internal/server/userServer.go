@@ -36,3 +36,8 @@ func (s *UserServer) GetUserInfo(ctx context.Context, in *pb.GetUserInfoReq) (*p
 	l := logic.NewGetUserInfoLogic(ctx, s.svcCtx)
 	return l.GetUserInfo(in)
 }
+
+func (s *UserServer) FollowUser(ctx context.Context, in *pb.FollowUserReq) (*pb.Empty, error) {
+	l := logic.NewFollowUserLogic(ctx, s.svcCtx)
+	return l.FollowUser(in)
+}

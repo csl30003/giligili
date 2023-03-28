@@ -35,11 +35,6 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Handler: user.GetUserInfoHandler(serverCtx),
 			},
 			{
-				Method:  http.MethodPost,
-				Path:    "/logout",
-				Handler: user.LogoutHandler(serverCtx),
-			},
-			{
 				Method:  http.MethodGet,
 				Path:    "/followerList",
 				Handler: user.GetFollowerListHandler(serverCtx),

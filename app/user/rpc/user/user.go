@@ -13,6 +13,8 @@ import (
 )
 
 type (
+	Empty           = pb.Empty
+	FollowUserReq   = pb.FollowUserReq
 	GetUserInfoReq  = pb.GetUserInfoReq
 	GetUserInfoResp = pb.GetUserInfoResp
 	LoginReq        = pb.LoginReq
@@ -24,6 +26,7 @@ type (
 		Register(ctx context.Context, in *RegisterReq, opts ...grpc.CallOption) (*RegisterResp, error)
 		Login(ctx context.Context, in *LoginReq, opts ...grpc.CallOption) (*LoginResp, error)
 		GetUserInfo(ctx context.Context, in *GetUserInfoReq, opts ...grpc.CallOption) (*GetUserInfoResp, error)
+		FollowUser(ctx context.Context, in *FollowUserReq, opts ...grpc.CallOption) (*Empty, error)
 	}
 
 	defaultUser struct {
@@ -50,4 +53,9 @@ func (m *defaultUser) Login(ctx context.Context, in *LoginReq, opts ...grpc.Call
 func (m *defaultUser) GetUserInfo(ctx context.Context, in *GetUserInfoReq, opts ...grpc.CallOption) (*GetUserInfoResp, error) {
 	client := pb.NewUserClient(m.cli.Conn())
 	return client.GetUserInfo(ctx, in, opts...)
+}
+
+func (m *defaultUser) FollowUser(ctx context.Context, in *FollowUserReq, opts ...grpc.CallOption) (*Empty, error) {
+	client := pb.NewUserClient(m.cli.Conn())
+	return client.FollowUser(ctx, in, opts...)
 }
