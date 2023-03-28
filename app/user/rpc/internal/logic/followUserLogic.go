@@ -25,6 +25,7 @@ func NewFollowUserLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Follow
 	}
 }
 
+// FollowUser 关注用户
 func (l *FollowUserLogic) FollowUser(in *pb.FollowUserReq) (*pb.Empty, error) {
 	// 判断是否相等
 	if in.UserId == in.FolloweeId {

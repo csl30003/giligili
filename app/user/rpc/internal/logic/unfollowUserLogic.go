@@ -26,6 +26,7 @@ func NewUnfollowUserLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Unfo
 	}
 }
 
+// UnfollowUser 取关用户
 func (l *UnfollowUserLogic) UnfollowUser(in *pb.UnfollowUserReq) (*pb.Empty, error) {
 	// 判断是否相等
 	if in.UserId == in.FolloweeId {

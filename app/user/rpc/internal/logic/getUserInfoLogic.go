@@ -25,6 +25,7 @@ func NewGetUserInfoLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetUs
 	}
 }
 
+// GetUserInfo 获取用户信息
 func (l *GetUserInfoLogic) GetUserInfo(in *pb.GetUserInfoReq) (*pb.GetUserInfoResp, error) {
 	user, err := l.svcCtx.UserModel.FindOneById(l.ctx, in.Id)
 	if err != nil {

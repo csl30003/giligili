@@ -26,6 +26,7 @@ func NewRegisterLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Register
 	}
 }
 
+// Register 注册
 func (l *RegisterLogic) Register(in *pb.RegisterReq) (*pb.RegisterResp, error) {
 	// 判断用户名是否已经存在，这里有个坑，go-zero查询会先查 redis，没有再去 MySQL，
 	// 新用户第一次注册，用用户名查，查不到数据才能注册，而这里 go-zero 查不到会到 redis 设置一个键值对：username:xxx : *，

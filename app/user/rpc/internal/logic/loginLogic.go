@@ -25,6 +25,7 @@ func NewLoginLogic(ctx context.Context, svcCtx *svc.ServiceContext) *LoginLogic 
 	}
 }
 
+// Login 登录
 func (l *LoginLogic) Login(in *pb.LoginReq) (*pb.LoginResp, error) {
 	user, err := l.svcCtx.UserModel.FindOneByUsername(l.ctx, in.Username)
 	if err != nil {
