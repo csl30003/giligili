@@ -34,8 +34,8 @@ type GetVideoDetailResp struct {
 }
 
 type UploadVideoReq struct {
-	Title       string `json:"title"`
-	Description string `json:"description"`
+	Title       string `form:"title"`
+	Description string `form:"description"`
 }
 
 type UploadVideoResp struct {

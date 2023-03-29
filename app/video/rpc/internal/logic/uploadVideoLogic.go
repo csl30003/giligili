@@ -2,9 +2,11 @@ package logic
 
 import (
 	"context"
-
+	"database/sql"
+	"giligili/app/video/model"
 	"giligili/app/video/rpc/internal/svc"
 	"giligili/app/video/rpc/pb"
+	"google.golang.org/grpc/status"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -23,8 +25,26 @@ func NewUploadVideoLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Uploa
 	}
 }
 
+// UploadVideo 上传视频
 func (l *UploadVideoLogic) UploadVideo(in *pb.UploadVideoReq) (*pb.UploadVideoResp, error) {
-	// todo: add your logic here and delete this line
+	newVideo := model.Video{
+		Title:  in.Title,
+		Url:    in.Url,
+		UserId: in.UserId,
+		Description: sql.NullString{
+			String: in.Description,
+			Valid:  true,
+		},
+	}
+	result, err := l.svcCtx.VideoModel.Insert(l.ctx, &newVideo)
+	if err != nil {
+		return nil, status.Error(100, "视频存入数据库失败")
+	}
 
-	return &pb.UploadVideoResp{}, nil
+	newVideo.Id, err = result.LastInsertId()
+	if err != nil {
+		return nil, status.Error(100, err.Error())
+	}
+
+	return &pb.UploadVideoResp{Success: true}, nil
 }

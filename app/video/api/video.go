@@ -12,6 +12,8 @@ import (
 	"github.com/zeromicro/go-zero/rest"
 )
 
+const maxMemory = 32 << 20 // 32MB
+
 var configFile = flag.String("f", "etc/video.yaml", "the config file")
 
 func main() {
@@ -19,6 +21,9 @@ func main() {
 
 	var c config.Config
 	conf.MustLoad(*configFile, &c)
+
+	// 因为要传视频，所以调大了
+	c.MaxBytes = maxMemory
 
 	server := rest.MustNewServer(c.RestConf)
 	defer server.Stop()
