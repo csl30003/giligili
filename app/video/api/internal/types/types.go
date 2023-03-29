@@ -34,9 +34,7 @@ type GetVideoDetailResp struct {
 }
 
 type UploadVideoReq struct {
-	UserId      int    `json:"userId"`
 	Title       string `json:"title"`
-	Url         string `json:"url"`
 	Description string `json:"description"`
 }
 
@@ -45,7 +43,6 @@ type UploadVideoResp struct {
 }
 
 type LikeVideoReq struct {
-	UserId  int `json:"userId"`
 	VideoId int `json:"videoId"`
 }
 
@@ -54,7 +51,6 @@ type LikeVideoResp struct {
 }
 
 type UnlikeVideoReq struct {
-	UserId  int `json:"userId"`
 	VideoId int `json:"videoId"`
 }
 
@@ -63,7 +59,6 @@ type UnlikeVideoResp struct {
 }
 
 type DislikeVideoReq struct {
-	UserId  int `json:"userId"`
 	VideoId int `json:"videoId"`
 }
 
@@ -72,7 +67,6 @@ type DislikeVideoResp struct {
 }
 
 type UndislikeVideoReq struct {
-	UserId  int `json:"userId"`
 	VideoId int `json:"videoId"`
 }
 

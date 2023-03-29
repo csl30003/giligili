@@ -3,14 +3,19 @@ Host: 0.0.0.0
 Port: 8002
 
 Log:
-  ServiceName: user-api
+  ServiceName: video-api
   Mode: file
   Path: logs
   Level: info
   Encoding: plain
-  Compress: true
   KeepDays: 7
 
 Auth:
   AccessSecret: giligili_jwt_key
   AccessExpire: 10800
+
+VideoRpcConf:
+  Etcd:
+    Hosts:
+      - 127.0.0.1:2379
+    Key: video.rpc

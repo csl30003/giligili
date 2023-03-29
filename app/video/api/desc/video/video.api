@@ -46,9 +46,7 @@ type (
 
 type (
     UploadVideoReq {
-        UserId int `json:"userId"`
         Title string `json:"title"`
-        Url string `json:"url"`
         Description string `json:"description"`
     }
     UploadVideoResp {
@@ -58,7 +56,6 @@ type (
 
 type (
     LikeVideoReq {
-        UserId int `json:"userId"`
         VideoId int `json:"videoId"`
     }
     LikeVideoResp {
@@ -68,7 +65,6 @@ type (
 
 type (
     UnlikeVideoReq {
-        UserId int `json:"userId"`
         VideoId int `json:"videoId"`
     }
     UnlikeVideoResp {
@@ -78,7 +74,6 @@ type (
 
 type (
     DislikeVideoReq {
-        UserId int `json:"userId"`
         VideoId int `json:"videoId"`
     }
     DislikeVideoResp {
@@ -88,7 +83,6 @@ type (
 
 type (
     UndislikeVideoReq {
-        UserId int `json:"userId"`
         VideoId int `json:"videoId"`
     }
     UndislikeVideoResp {
