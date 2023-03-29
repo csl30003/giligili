@@ -46,6 +46,7 @@ type (
 
 type (
     UploadVideoReq {
+        // file File `form:file`
         Title string `form:"title"`
         Description string `form:"description"`
     }

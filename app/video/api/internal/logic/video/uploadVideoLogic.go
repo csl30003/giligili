@@ -38,7 +38,7 @@ func NewUploadVideoLogic(ctx context.Context, svcCtx *svc.ServiceContext, r *htt
 	}
 }
 
-// UploadVideo 上传视频
+// UploadVideo 上传视频，可以考虑用消息队列给消费者干，这样文件上传失败怎么办？
 func (l *UploadVideoLogic) UploadVideo(req *types.UploadVideoReq) (resp *types.UploadVideoResp, err error) {
 	userId := ctxData.GetUserIdFromCtx(l.ctx)
 
