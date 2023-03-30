@@ -42,11 +42,6 @@ func NewUploadVideoLogic(ctx context.Context, svcCtx *svc.ServiceContext, r *htt
 func (l *UploadVideoLogic) UploadVideo(req *types.UploadVideoReq) (resp *types.UploadVideoResp, err error) {
 	userId := ctxData.GetUserIdFromCtx(l.ctx)
 
-	// 目前只限定上传一个视频
-	if len(l.r.MultipartForm.File) != 1 {
-		return nil, errors.New("只允许上传一个视频")
-	}
-
 	localFileName := uploadPath
 	file, fileHeader, err := l.r.FormFile("file")
 	if err != nil {

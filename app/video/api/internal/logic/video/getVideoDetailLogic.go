@@ -2,6 +2,7 @@ package video
 
 import (
 	"context"
+	"giligili/app/video/rpc/video"
 
 	"giligili/app/video/api/internal/svc"
 	"giligili/app/video/api/internal/types"
@@ -23,8 +24,25 @@ func NewGetVideoDetailLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Ge
 	}
 }
 
+// GetVideoDetail 获取一条视频详情，没有视频文件，只有信息
 func (l *GetVideoDetailLogic) GetVideoDetail(req *types.GetVideoDetailReq) (resp *types.GetVideoDetailResp, err error) {
-	// todo: add your logic here and delete this line
+	getVideoDetailResp, err := l.svcCtx.VideoRpcClient.GetVideoDetail(l.ctx, &video.GetVideoDetailReq{
+		VideoId: req.VideoId,
+	})
+	if err != nil {
+		return nil, err
+	}
 
-	return
+	return &types.GetVideoDetailResp{Video: types.Video{
+		VideoId:      getVideoDetailResp.Video.VideoId,
+		Title:        getVideoDetailResp.Video.Title,
+		Url:          getVideoDetailResp.Video.Url,
+		UserId:       getVideoDetailResp.Video.UserId,
+		UserNickname: getVideoDetailResp.Video.UserNickname,
+		Description:  getVideoDetailResp.Video.Description,
+		LikeCount:    getVideoDetailResp.Video.LikeCount,
+		DislikeCount: getVideoDetailResp.Video.DislikeCount,
+		CreateTime:   getVideoDetailResp.Video.CreateTime,
+		UpdateTime:   getVideoDetailResp.Video.UpdateTime,
+	}}, nil
 }

@@ -9,9 +9,24 @@ info(
 )
 
 type (
+    Video {
+        VideoId int64 `json:"videoId"`
+        Title string `json:"title"`
+        Url string `json:"url"`
+        UserId int64 `json:"userId"`
+        UserNickname string `json:"userNickname"`
+        Description string `json:"description"`
+        LikeCount int64 `json:"likeCount"`
+        DislikeCount int64 `json:"dislikeCount"`
+        CreateTime string `json:"createTime"`
+        UpdateTime string `json:"updateTime"`
+    }
+)
+
+type (
     GetVideoListReq {
-        Page int `json:"page"`
-        PageSize int `json:"pageSize"`
+        Page int64 `json:"page"`
+        PageSize int64 `json:"pageSize"`
         Keyword string `json:"keyword"`
     }
     GetVideoListResp {
@@ -20,24 +35,8 @@ type (
 )
 
 type (
-    Video {
-        VideoId int `json:"videoId"`
-        Title string `json:"title"`
-        Url string `json:"url"`
-        UserId int `json:"userId"`
-        UserNickname string `json:"userNickname"`
-        Description string `json:"description"`
-        LikeCount int `json:"likeCount"`
-        DislikeCount int `json:"dislikeCount"`
-        CommentCount int `json:"commentCount"`
-        CreateTime string `json:"createTime"`
-        UpdateTime string `json:"updateTime"`
-    }
-)
-
-type (
     GetVideoDetailReq {
-        VideoId int `json:"videoId"`
+        VideoId int64 `json:"videoId"`
     }
     GetVideoDetailResp {
         Video Video `json:"video"`
@@ -57,7 +56,7 @@ type (
 
 type (
     LikeVideoReq {
-        VideoId int `json:"videoId"`
+        VideoId int64 `json:"videoId"`
     }
     LikeVideoResp {
         Success bool `json:"success"`
@@ -66,7 +65,7 @@ type (
 
 type (
     UnlikeVideoReq {
-        VideoId int `json:"videoId"`
+        VideoId int64 `json:"videoId"`
     }
     UnlikeVideoResp {
         Success bool `json:"success"`
@@ -75,7 +74,7 @@ type (
 
 type (
     DislikeVideoReq {
-        VideoId int `json:"videoId"`
+        VideoId int64 `json:"videoId"`
     }
     DislikeVideoResp {
         Success bool `json:"success"`
@@ -84,7 +83,7 @@ type (
 
 type (
     UndislikeVideoReq {
-        VideoId int `json:"videoId"`
+        VideoId int64 `json:"videoId"`
     }
     UndislikeVideoResp {
         Success bool `json:"success"`

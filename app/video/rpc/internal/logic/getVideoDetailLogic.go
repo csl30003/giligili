@@ -2,9 +2,9 @@ package logic
 
 import (
 	"context"
-
 	"giligili/app/video/rpc/internal/svc"
 	"giligili/app/video/rpc/pb"
+	"google.golang.org/grpc/status"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -23,8 +23,25 @@ func NewGetVideoDetailLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Ge
 	}
 }
 
+// GetVideoDetail 获取一条视频详情
 func (l *GetVideoDetailLogic) GetVideoDetail(in *pb.GetVideoDetailReq) (*pb.GetVideoDetailResp, error) {
-	// todo: add your logic here and delete this line
+	video, err := l.svcCtx.VideoModel.FindOneById(l.ctx, in.VideoId)
+	if err != nil {
+		return nil, status.Error(100, err.Error())
+	}
 
-	return &pb.GetVideoDetailResp{}, nil
+	return &pb.GetVideoDetailResp{
+		Video: &pb.VideoInfo{
+			VideoId:      video.Id,
+			Title:        video.Title,
+			Url:          video.Url,
+			UserId:       video.UserId,
+			UserNickname: video.Nickname,
+			Description:  video.Description.String,
+			LikeCount:    video.Like,
+			DislikeCount: video.Dislike,
+			CreateTime:   video.CreateTime.String(),
+			UpdateTime:   video.UpdateTime.String(),
+		},
+	}, nil
 }
