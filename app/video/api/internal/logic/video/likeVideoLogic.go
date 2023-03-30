@@ -2,6 +2,8 @@ package video
 
 import (
 	"context"
+	"giligili/app/video/rpc/video"
+	"giligili/common/ctxData"
 
 	"giligili/app/video/api/internal/svc"
 	"giligili/app/video/api/internal/types"
@@ -23,8 +25,17 @@ func NewLikeVideoLogic(ctx context.Context, svcCtx *svc.ServiceContext) *LikeVid
 	}
 }
 
+// LikeVideo 用户给视频点赞
 func (l *LikeVideoLogic) LikeVideo(req *types.LikeVideoReq) (resp *types.LikeVideoResp, err error) {
-	// todo: add your logic here and delete this line
+	userId := ctxData.GetUserIdFromCtx(l.ctx)
 
-	return
+	likeVideoResp, err := l.svcCtx.VideoRpcClient.LikeVideo(l.ctx, &video.LikeVideoReq{
+		UserId:  userId,
+		VideoId: req.VideoId,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return &types.LikeVideoResp{Success: likeVideoResp.Success}, nil
 }

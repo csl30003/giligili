@@ -26,7 +26,7 @@ func NewGetVideoDetailLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Ge
 
 // GetVideoDetail 获取一条视频详情
 func (l *GetVideoDetailLogic) GetVideoDetail(in *pb.GetVideoDetailReq) (*pb.GetVideoDetailResp, error) {
-	video, err := l.svcCtx.VideoModel.FindOneById(l.ctx, in.VideoId)
+	video, err := l.svcCtx.VideoModel.FindVideoTempById(l.ctx, in.VideoId)
 	if err == model.ErrNotFound {
 		return &pb.GetVideoDetailResp{Video: nil}, nil
 	}

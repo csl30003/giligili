@@ -10,7 +10,10 @@ import (
 	"time"
 )
 
-var _ VideoModel = (*customVideoModel)(nil)
+var (
+	_                              VideoModel = (*customVideoModel)(nil)
+	cacheGiligiliVideoTempIdPrefix            = "cache:giligili:video:Temp:id:"
+)
 
 type VideoTemp struct {
 	Id          int64          `db:"id"`          // 视频ID
@@ -31,7 +34,8 @@ type (
 	// and implement the added methods in customVideoModel.
 	VideoModel interface {
 		videoModel
-		FindOneById(ctx context.Context, id int64) (*VideoTemp, error)
+		FindOneById(ctx context.Context, id int64) (*Video, error)
+		FindVideoTempById(ctx context.Context, id int64) (*VideoTemp, error)
 		FindMany(ctx context.Context, page, pageSize int64, keyword string) ([]*VideoTemp, error)
 	}
 
@@ -47,11 +51,28 @@ func NewVideoModel(conn sqlx.SqlConn, c cache.CacheConf) VideoModel {
 	}
 }
 
-// FindOneById 通过 id 得到视频
-func (c *customVideoModel) FindOneById(ctx context.Context, id int64) (*VideoTemp, error) {
+func (c *customVideoModel) FindOneById(ctx context.Context, id int64) (*Video, error) {
 	giligiliVideoIdKey := fmt.Sprintf("%s%v", cacheGiligiliVideoIdPrefix, id)
-	var resp VideoTemp
+	var resp Video
 	err := c.QueryRowCtx(ctx, &resp, giligiliVideoIdKey, func(ctx context.Context, conn sqlx.SqlConn, v interface{}) error {
+		query := fmt.Sprintf("select %s from %s where `id` = ? and delete_time is null and status=1 limit 1", videoRows, c.table)
+		return conn.QueryRowCtx(ctx, v, query, id)
+	})
+	switch err {
+	case nil:
+		return &resp, nil
+	case sqlc.ErrNotFound:
+		return nil, ErrNotFound
+	default:
+		return nil, err
+	}
+}
+
+// FindVideoTempById 通过 id 得到视频
+func (c *customVideoModel) FindVideoTempById(ctx context.Context, id int64) (*VideoTemp, error) {
+	giligiliVideoTempIdKey := fmt.Sprintf("%s%v", cacheGiligiliVideoTempIdPrefix, id)
+	var resp VideoTemp
+	err := c.QueryRowCtx(ctx, &resp, giligiliVideoTempIdKey, func(ctx context.Context, conn sqlx.SqlConn, v interface{}) error {
 		query := "select v.id, v.create_time, v.update_time, v.title, v.url, v.user_id, v.description, v.like, v.dislike, u.nickname from video v left join user u on v.user_id=u.id where v.id = ? and v.delete_time is null and v.status=1 limit 1"
 		return conn.QueryRowCtx(ctx, v, query, id)
 	})
