@@ -33,6 +33,10 @@ func (l *GetVideoDetailLogic) GetVideoDetail(req *types.GetVideoDetailReq) (resp
 		return nil, err
 	}
 
+	if getVideoDetailResp.Video == nil {
+		return &types.GetVideoDetailResp{}, nil
+	}
+
 	return &types.GetVideoDetailResp{Video: types.Video{
 		VideoId:      getVideoDetailResp.Video.VideoId,
 		Title:        getVideoDetailResp.Video.Title,

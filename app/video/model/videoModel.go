@@ -22,7 +22,6 @@ type VideoTemp struct {
 	Description sql.NullString `db:"description"` // 视频描述
 	Like        int64          `db:"like"`        // 点赞数
 	Dislike     int64          `db:"dislike"`     // 踩数
-	Status      int64          `db:"status"`      // 审核状态，0表示未审核，1表示已审核
 
 	Nickname string `db:"nickname"` // 视频作者昵称
 }
@@ -33,6 +32,7 @@ type (
 	VideoModel interface {
 		videoModel
 		FindOneById(ctx context.Context, id int64) (*VideoTemp, error)
+		FindMany(ctx context.Context, page, pageSize int64, keyword string) ([]*VideoTemp, error)
 	}
 
 	customVideoModel struct {
@@ -52,12 +52,31 @@ func (c *customVideoModel) FindOneById(ctx context.Context, id int64) (*VideoTem
 	giligiliVideoIdKey := fmt.Sprintf("%s%v", cacheGiligiliVideoIdPrefix, id)
 	var resp VideoTemp
 	err := c.QueryRowCtx(ctx, &resp, giligiliVideoIdKey, func(ctx context.Context, conn sqlx.SqlConn, v interface{}) error {
-		query := "select v.id, v.create_time, v.update_time, v.title, v.url, v.user_id, v.description, v.like, v.dislike, v.status, u.nickname from video v left join user u on v.user_id=u.id where v.id = ? and v.delete_time is null limit 1"
+		query := "select v.id, v.create_time, v.update_time, v.title, v.url, v.user_id, v.description, v.like, v.dislike, u.nickname from video v left join user u on v.user_id=u.id where v.id = ? and v.delete_time is null and v.status=1 limit 1"
 		return conn.QueryRowCtx(ctx, v, query, id)
 	})
 	switch err {
 	case nil:
 		return &resp, nil
+	case sqlc.ErrNotFound:
+		return nil, ErrNotFound
+	default:
+		return nil, err
+	}
+}
+
+// FindMany 通过页面、页面大小、模糊查询值获取视频列表
+func (c *customVideoModel) FindMany(ctx context.Context, page, pageSize int64, keyword string) ([]*VideoTemp, error) {
+	var resp []*VideoTemp
+	query := "select v.id, v.create_time, v.update_time, v.title, v.url, v.user_id, u.nickname, v.description, v.like, v.dislike from video v left join user u on v.user_id=u.id where v.delete_time is null and v.status=1"
+	if keyword != "" {
+		query += " and v.title like '%" + keyword + "%'"
+	}
+	query += " order by v.id desc limit ?,?"
+	err := c.QueryRowsNoCacheCtx(ctx, &resp, query, (page-1)*pageSize, pageSize)
+	switch err {
+	case nil:
+		return resp, nil
 	case sqlc.ErrNotFound:
 		return nil, ErrNotFound
 	default:

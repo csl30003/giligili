@@ -2,6 +2,7 @@ package logic
 
 import (
 	"context"
+	"giligili/app/video/model"
 	"giligili/app/video/rpc/internal/svc"
 	"giligili/app/video/rpc/pb"
 	"google.golang.org/grpc/status"
@@ -26,6 +27,9 @@ func NewGetVideoDetailLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Ge
 // GetVideoDetail 获取一条视频详情
 func (l *GetVideoDetailLogic) GetVideoDetail(in *pb.GetVideoDetailReq) (*pb.GetVideoDetailResp, error) {
 	video, err := l.svcCtx.VideoModel.FindOneById(l.ctx, in.VideoId)
+	if err == model.ErrNotFound {
+		return &pb.GetVideoDetailResp{Video: nil}, nil
+	}
 	if err != nil {
 		return nil, status.Error(100, err.Error())
 	}
