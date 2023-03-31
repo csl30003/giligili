@@ -37,6 +37,16 @@ func (l *LikeVideoLogic) LikeVideo(in *pb.LikeVideoReq) (*pb.LikeVideoResp, erro
 	// 在Redis中创建一个Hash结构，以视频ID为键，以点赞用户ID为值，用于存储点赞信息
 	key := fmt.Sprintf("%s%d", redisConstant.LikeSetKeyPrefix, in.VideoId)
 
+	// 查询Redis中是否存在点赞信息
+	exist, err := l.svcCtx.RedisClient.SIsMember(l.ctx, key, in.UserId).Result()
+	if err != nil {
+		return nil, status.Error(100, "查询Redis中点赞信息失败")
+	}
+	if exist {
+		// 如果点赞记录已存在，返回错误信息
+		return &pb.LikeVideoResp{Success: false}, nil
+	}
+
 	// 向Redis中添加点赞信息
 	err = l.svcCtx.RedisClient.SAdd(l.ctx, key, in.UserId).Err()
 	if err != nil {
@@ -52,11 +62,6 @@ func (l *LikeVideoLogic) LikeVideo(in *pb.LikeVideoReq) (*pb.LikeVideoResp, erro
 	err = l.svcCtx.RedisClient.Set(l.ctx, countKey, count, 0).Err()
 	if err != nil {
 		return nil, status.Error(100, "更新点赞数缓存失败")
-	}
-
-	// 如果点赞数没有变动，说明用户早就点过赞了，就不用更新数据库了
-	if video.Like == count {
-		return &pb.LikeVideoResp{Success: false}, nil
 	}
 
 	// 将点赞信息写入数据库

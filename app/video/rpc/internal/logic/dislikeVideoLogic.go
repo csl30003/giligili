@@ -13,11 +13,6 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-const (
-	dislikeSetKeyPrefix   = "cache:giligili:video:dislikeSet:"
-	dislikeCountKeyPrefix = "cache:giligili:video:dislikeCount:"
-)
-
 type DislikeVideoLogic struct {
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
@@ -43,6 +38,16 @@ func (l *DislikeVideoLogic) DislikeVideo(in *pb.DislikeVideoReq) (*pb.DislikeVid
 	// 在Redis中创建一个Hash结构，以视频ID为键，以踩用户ID为值，用于存储踩信息
 	key := fmt.Sprintf("%s%d", redisConstant.DislikeSetKeyPrefix, in.VideoId)
 
+	// 查询Redis中是否存在踩信息
+	exist, err := l.svcCtx.RedisClient.SIsMember(l.ctx, key, in.UserId).Result()
+	if err != nil {
+		return nil, status.Error(100, "查询Redis中点赞信息失败")
+	}
+	if exist {
+		// 如果点赞记录已存在，返回错误信息
+		return &pb.DislikeVideoResp{Success: false}, nil
+	}
+
 	// 向Redis中添加踩信息
 	err = l.svcCtx.RedisClient.SAdd(l.ctx, key, in.UserId).Err()
 	if err != nil {
@@ -58,11 +63,6 @@ func (l *DislikeVideoLogic) DislikeVideo(in *pb.DislikeVideoReq) (*pb.DislikeVid
 	err = l.svcCtx.RedisClient.Set(l.ctx, countKey, count, 0).Err()
 	if err != nil {
 		return nil, status.Error(100, "更新踩数缓存失败")
-	}
-
-	// 如果踩数没有变动，说明用户早就踩过了，就不用更新数据库了
-	if video.Dislike == count {
-		return &pb.DislikeVideoResp{Success: false}, nil
 	}
 
 	// 将踩信息写入数据库
