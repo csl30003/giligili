@@ -25,10 +25,11 @@ message GetChatHistoryResp {
 }
 
 message ChatMessage {
-  int64 fromUserId = 1;
-  string fromUserNickname = 2;
-  int64 toUserId = 3;
-  string toUserNickname = 4;
-  string content = 5;
-  string createTime = 6;
+  int64 Id = 1;
+  int64 fromUserId = 2;
+  string fromUserNickname = 3;
+  int64 toUserId = 4;
+  string toUserNickname = 5;
+  string content = 6;
+  string createTime = 7;
 }

@@ -54,6 +54,7 @@ func (l *GetChatHistoryLogic) GetChatHistory(in *pb.GetChatHistoryReq) (*pb.GetC
 	}
 	for _, chatMessage := range chatMessages {
 		result.ChatHistory = append(result.ChatHistory, &pb.ChatMessage{
+			Id:               chatMessage.Id,
 			FromUserId:       chatMessage.FromUserId,
 			FromUserNickname: chatMessage.FromUserNickname,
 			ToUserId:         chatMessage.ToUserId,

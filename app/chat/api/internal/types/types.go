@@ -18,6 +18,7 @@ type GetChatHistoryResp struct {
 }
 
 type ChatMessage struct {
+	Id               int64  `json:"id"`
 	FromUserId       int64  `json:"fromUserId"`
 	FromUserNickname string `json:"fromUserNickname"`
 	ToUserId         int64  `json:"toUserId"`
