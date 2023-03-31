@@ -35,6 +35,7 @@ type (
 	VideoModel interface {
 		videoModel
 		FindOneById(ctx context.Context, id int64) (*Video, error)
+		FindOneByIdAndIgnoreStatus(ctx context.Context, id int64) (*Video, error)
 		FindVideoTempById(ctx context.Context, id int64) (*VideoTemp, error)
 		FindManyByKeyword(ctx context.Context, page, pageSize int64, keyword string) ([]*VideoTemp, error)
 		FindMany(ctx context.Context) ([]*Video, error)
@@ -52,11 +53,30 @@ func NewVideoModel(conn sqlx.SqlConn, c cache.CacheConf) VideoModel {
 	}
 }
 
+// FindOneById 通过 id 获取视频
 func (c *customVideoModel) FindOneById(ctx context.Context, id int64) (*Video, error) {
 	giligiliVideoIdKey := fmt.Sprintf("%s%v", cacheGiligiliVideoIdPrefix, id)
 	var resp Video
 	err := c.QueryRowCtx(ctx, &resp, giligiliVideoIdKey, func(ctx context.Context, conn sqlx.SqlConn, v interface{}) error {
 		query := fmt.Sprintf("select %s from %s where `id` = ? and delete_time is null and status=1 limit 1", videoRows, c.table)
+		return conn.QueryRowCtx(ctx, v, query, id)
+	})
+	switch err {
+	case nil:
+		return &resp, nil
+	case sqlc.ErrNotFound:
+		return nil, ErrNotFound
+	default:
+		return nil, err
+	}
+}
+
+// FindOneByIdAndIgnoreStatus 通过 id 获取视频，并且无论状态是如何
+func (c *customVideoModel) FindOneByIdAndIgnoreStatus(ctx context.Context, id int64) (*Video, error) {
+	giligiliVideoIdKey := fmt.Sprintf("%s%v", cacheGiligiliVideoIdPrefix, id)
+	var resp Video
+	err := c.QueryRowCtx(ctx, &resp, giligiliVideoIdKey, func(ctx context.Context, conn sqlx.SqlConn, v interface{}) error {
+		query := fmt.Sprintf("select %s from %s where `id` = ? and delete_time is null limit 1", videoRows, c.table)
 		return conn.QueryRowCtx(ctx, v, query, id)
 	})
 	switch err {
