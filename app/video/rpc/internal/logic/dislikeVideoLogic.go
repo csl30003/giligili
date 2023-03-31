@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"giligili/app/video/model"
+	"giligili/common/redisConstant"
 	"google.golang.org/grpc/status"
 
 	"giligili/app/video/rpc/internal/svc"
@@ -40,7 +41,7 @@ func (l *DislikeVideoLogic) DislikeVideo(in *pb.DislikeVideoReq) (*pb.DislikeVid
 	}
 
 	// 在Redis中创建一个Hash结构，以视频ID为键，以踩用户ID为值，用于存储踩信息
-	key := fmt.Sprintf("%s%d", dislikeSetKeyPrefix, in.VideoId)
+	key := fmt.Sprintf("%s%d", redisConstant.DislikeSetKeyPrefix, in.VideoId)
 
 	// 向Redis中添加踩信息
 	err = l.svcCtx.RedisClient.SAdd(l.ctx, key, in.UserId).Err()
@@ -53,7 +54,7 @@ func (l *DislikeVideoLogic) DislikeVideo(in *pb.DislikeVideoReq) (*pb.DislikeVid
 	if err != nil {
 		return nil, status.Error(100, "从Redis中获取踩数失败")
 	}
-	countKey := fmt.Sprintf("%s%d", dislikeCountKeyPrefix, in.VideoId)
+	countKey := fmt.Sprintf("%s%d", redisConstant.DislikeCountKeyPrefix, in.VideoId)
 	err = l.svcCtx.RedisClient.Set(l.ctx, countKey, count, 0).Err()
 	if err != nil {
 		return nil, status.Error(100, "更新踩数缓存失败")

@@ -2,6 +2,8 @@ package video
 
 import (
 	"context"
+	"giligili/app/video/rpc/video"
+	"giligili/common/ctxData"
 
 	"giligili/app/video/api/internal/svc"
 	"giligili/app/video/api/internal/types"
@@ -23,8 +25,17 @@ func NewUndislikeVideoLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Un
 	}
 }
 
+// UndislikeVideo 用户取消视频踩
 func (l *UndislikeVideoLogic) UndislikeVideo(req *types.UndislikeVideoReq) (resp *types.UndislikeVideoResp, err error) {
-	// todo: add your logic here and delete this line
+	userId := ctxData.GetUserIdFromCtx(l.ctx)
 
-	return
+	undislikeVideoResp, err := l.svcCtx.VideoRpcClient.UndislikeVideo(l.ctx, &video.UndislikeVideoReq{
+		UserId:  userId,
+		VideoId: req.VideoId,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return &types.UndislikeVideoResp{Success: undislikeVideoResp.Success}, nil
 }

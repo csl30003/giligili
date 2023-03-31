@@ -6,14 +6,10 @@ import (
 	"giligili/app/video/model"
 	"giligili/app/video/rpc/internal/svc"
 	"giligili/app/video/rpc/pb"
+	"giligili/common/redisConstant"
 	"google.golang.org/grpc/status"
 
 	"github.com/zeromicro/go-zero/core/logx"
-)
-
-const (
-	likeSetKeyPrefix   = "cache:giligili:video:likeSet:"
-	likeCountKeyPrefix = "cache:giligili:video:likeCount:"
 )
 
 type LikeVideoLogic struct {
@@ -39,7 +35,7 @@ func (l *LikeVideoLogic) LikeVideo(in *pb.LikeVideoReq) (*pb.LikeVideoResp, erro
 	}
 
 	// 在Redis中创建一个Hash结构，以视频ID为键，以点赞用户ID为值，用于存储点赞信息
-	key := fmt.Sprintf("%s%d", likeSetKeyPrefix, in.VideoId)
+	key := fmt.Sprintf("%s%d", redisConstant.LikeSetKeyPrefix, in.VideoId)
 
 	// 向Redis中添加点赞信息
 	err = l.svcCtx.RedisClient.SAdd(l.ctx, key, in.UserId).Err()
@@ -52,7 +48,7 @@ func (l *LikeVideoLogic) LikeVideo(in *pb.LikeVideoReq) (*pb.LikeVideoResp, erro
 	if err != nil {
 		return nil, status.Error(100, "从Redis中获取点赞数失败")
 	}
-	countKey := fmt.Sprintf("%s%d", likeCountKeyPrefix, in.VideoId)
+	countKey := fmt.Sprintf("%s%d", redisConstant.LikeCountKeyPrefix, in.VideoId)
 	err = l.svcCtx.RedisClient.Set(l.ctx, countKey, count, 0).Err()
 	if err != nil {
 		return nil, status.Error(100, "更新点赞数缓存失败")

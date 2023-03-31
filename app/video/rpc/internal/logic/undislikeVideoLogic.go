@@ -23,6 +23,7 @@ func NewUndislikeVideoLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Un
 	}
 }
 
+// UndislikeVideo 用户取消视频踩
 func (l *UndislikeVideoLogic) UndislikeVideo(in *pb.UndislikeVideoReq) (*pb.UndislikeVideoResp, error) {
 	// todo: add your logic here and delete this line
 
