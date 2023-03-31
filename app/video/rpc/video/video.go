@@ -13,6 +13,8 @@ import (
 )
 
 type (
+	DeleteVideoReq     = pb.DeleteVideoReq
+	DeleteVideoResp    = pb.DeleteVideoResp
 	DislikeVideoReq    = pb.DislikeVideoReq
 	DislikeVideoResp   = pb.DislikeVideoResp
 	GetVideoDetailReq  = pb.GetVideoDetailReq
@@ -33,6 +35,7 @@ type (
 		GetVideoList(ctx context.Context, in *GetVideoListReq, opts ...grpc.CallOption) (*GetVideoListResp, error)
 		GetVideoDetail(ctx context.Context, in *GetVideoDetailReq, opts ...grpc.CallOption) (*GetVideoDetailResp, error)
 		UploadVideo(ctx context.Context, in *UploadVideoReq, opts ...grpc.CallOption) (*UploadVideoResp, error)
+		DeleteVideo(ctx context.Context, in *DeleteVideoReq, opts ...grpc.CallOption) (*DeleteVideoResp, error)
 		LikeVideo(ctx context.Context, in *LikeVideoReq, opts ...grpc.CallOption) (*LikeVideoResp, error)
 		UnlikeVideo(ctx context.Context, in *UnlikeVideoReq, opts ...grpc.CallOption) (*UnlikeVideoResp, error)
 		DislikeVideo(ctx context.Context, in *DislikeVideoReq, opts ...grpc.CallOption) (*DislikeVideoResp, error)
@@ -63,6 +66,11 @@ func (m *defaultVideo) GetVideoDetail(ctx context.Context, in *GetVideoDetailReq
 func (m *defaultVideo) UploadVideo(ctx context.Context, in *UploadVideoReq, opts ...grpc.CallOption) (*UploadVideoResp, error) {
 	client := pb.NewVideoClient(m.cli.Conn())
 	return client.UploadVideo(ctx, in, opts...)
+}
+
+func (m *defaultVideo) DeleteVideo(ctx context.Context, in *DeleteVideoReq, opts ...grpc.CallOption) (*DeleteVideoResp, error) {
+	client := pb.NewVideoClient(m.cli.Conn())
+	return client.DeleteVideo(ctx, in, opts...)
 }
 
 func (m *defaultVideo) LikeVideo(ctx context.Context, in *LikeVideoReq, opts ...grpc.CallOption) (*LikeVideoResp, error) {

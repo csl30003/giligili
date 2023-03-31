@@ -25,6 +25,7 @@ type VideoClient interface {
 	GetVideoList(ctx context.Context, in *GetVideoListReq, opts ...grpc.CallOption) (*GetVideoListResp, error)
 	GetVideoDetail(ctx context.Context, in *GetVideoDetailReq, opts ...grpc.CallOption) (*GetVideoDetailResp, error)
 	UploadVideo(ctx context.Context, in *UploadVideoReq, opts ...grpc.CallOption) (*UploadVideoResp, error)
+	DeleteVideo(ctx context.Context, in *DeleteVideoReq, opts ...grpc.CallOption) (*DeleteVideoResp, error)
 	LikeVideo(ctx context.Context, in *LikeVideoReq, opts ...grpc.CallOption) (*LikeVideoResp, error)
 	UnlikeVideo(ctx context.Context, in *UnlikeVideoReq, opts ...grpc.CallOption) (*UnlikeVideoResp, error)
 	DislikeVideo(ctx context.Context, in *DislikeVideoReq, opts ...grpc.CallOption) (*DislikeVideoResp, error)
@@ -60,6 +61,15 @@ func (c *videoClient) GetVideoDetail(ctx context.Context, in *GetVideoDetailReq,
 func (c *videoClient) UploadVideo(ctx context.Context, in *UploadVideoReq, opts ...grpc.CallOption) (*UploadVideoResp, error) {
 	out := new(UploadVideoResp)
 	err := c.cc.Invoke(ctx, "/pb.Video/UploadVideo", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *videoClient) DeleteVideo(ctx context.Context, in *DeleteVideoReq, opts ...grpc.CallOption) (*DeleteVideoResp, error) {
+	out := new(DeleteVideoResp)
+	err := c.cc.Invoke(ctx, "/pb.Video/DeleteVideo", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -109,6 +119,7 @@ type VideoServer interface {
 	GetVideoList(context.Context, *GetVideoListReq) (*GetVideoListResp, error)
 	GetVideoDetail(context.Context, *GetVideoDetailReq) (*GetVideoDetailResp, error)
 	UploadVideo(context.Context, *UploadVideoReq) (*UploadVideoResp, error)
+	DeleteVideo(context.Context, *DeleteVideoReq) (*DeleteVideoResp, error)
 	LikeVideo(context.Context, *LikeVideoReq) (*LikeVideoResp, error)
 	UnlikeVideo(context.Context, *UnlikeVideoReq) (*UnlikeVideoResp, error)
 	DislikeVideo(context.Context, *DislikeVideoReq) (*DislikeVideoResp, error)
@@ -128,6 +139,9 @@ func (UnimplementedVideoServer) GetVideoDetail(context.Context, *GetVideoDetailR
 }
 func (UnimplementedVideoServer) UploadVideo(context.Context, *UploadVideoReq) (*UploadVideoResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UploadVideo not implemented")
+}
+func (UnimplementedVideoServer) DeleteVideo(context.Context, *DeleteVideoReq) (*DeleteVideoResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteVideo not implemented")
 }
 func (UnimplementedVideoServer) LikeVideo(context.Context, *LikeVideoReq) (*LikeVideoResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method LikeVideo not implemented")
@@ -204,6 +218,24 @@ func _Video_UploadVideo_Handler(srv interface{}, ctx context.Context, dec func(i
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(VideoServer).UploadVideo(ctx, req.(*UploadVideoReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Video_DeleteVideo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteVideoReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(VideoServer).DeleteVideo(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/pb.Video/DeleteVideo",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(VideoServer).DeleteVideo(ctx, req.(*DeleteVideoReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -298,6 +330,10 @@ var Video_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UploadVideo",
 			Handler:    _Video_UploadVideo_Handler,
+		},
+		{
+			MethodName: "DeleteVideo",
+			Handler:    _Video_DeleteVideo_Handler,
 		},
 		{
 			MethodName: "LikeVideo",

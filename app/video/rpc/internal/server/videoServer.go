@@ -37,6 +37,11 @@ func (s *VideoServer) UploadVideo(ctx context.Context, in *pb.UploadVideoReq) (*
 	return l.UploadVideo(in)
 }
 
+func (s *VideoServer) DeleteVideo(ctx context.Context, in *pb.DeleteVideoReq) (*pb.DeleteVideoResp, error) {
+	l := logic.NewDeleteVideoLogic(ctx, s.svcCtx)
+	return l.DeleteVideo(in)
+}
+
 func (s *VideoServer) LikeVideo(ctx context.Context, in *pb.LikeVideoReq) (*pb.LikeVideoResp, error) {
 	l := logic.NewLikeVideoLogic(ctx, s.svcCtx)
 	return l.LikeVideo(in)

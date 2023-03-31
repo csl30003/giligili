@@ -32,6 +32,14 @@ type GetVideoDetailResp struct {
 	Video Video `json:"video"`
 }
 
+type DeleteVideoReq struct {
+	VideoId int64 `json:"videoId"`
+}
+
+type DeleteVideoResp struct {
+	Success bool `json:"success"`
+}
+
 type UploadVideoReq struct {
 	Title       string `form:"title"`
 	Description string `form:"description"`

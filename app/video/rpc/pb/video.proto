@@ -8,6 +8,7 @@ service Video {
   rpc GetVideoList (GetVideoListReq) returns (GetVideoListResp);
   rpc GetVideoDetail (GetVideoDetailReq) returns (GetVideoDetailResp);
   rpc UploadVideo (UploadVideoReq) returns (UploadVideoResp);
+  rpc DeleteVideo (DeleteVideoReq) returns (DeleteVideoResp);
   rpc LikeVideo (LikeVideoReq) returns (LikeVideoResp);
   rpc UnlikeVideo (UnlikeVideoReq) returns (UnlikeVideoResp);
   rpc DislikeVideo (DislikeVideoReq) returns (DislikeVideoResp);
@@ -51,6 +52,14 @@ message UploadVideoReq {
   string url = 4;
 }
 message UploadVideoResp {
+  bool success = 1;
+}
+
+message DeleteVideoReq {
+  int64 user_id = 1;
+  int64 video_id = 2;
+}
+message DeleteVideoResp {
   bool success = 1;
 }
 

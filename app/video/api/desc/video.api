@@ -40,6 +40,11 @@ service video {
 	@handler uploadVideo
 	post /uploadVideo (UploadVideoReq) returns (UploadVideoResp)
 	
+	// 删除视频
+	@doc "delete video"
+	@handler deleteVideo
+	post /deleteVideo (DeleteVideoReq) returns (DeleteVideoResp)
+	
 	// 点赞视频
 	@doc "like video"
 	@handler likeVideo

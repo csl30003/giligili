@@ -33,7 +33,7 @@ func (l *GetVideoListLogic) GetVideoList(in *pb.GetVideoListReq) (*pb.GetVideoLi
 		return nil, status.Error(100, "页面大小不能小于1")
 	}
 
-	videoList, err := l.svcCtx.VideoModel.FindMany(l.ctx, in.Page, in.PageSize, in.Keyword)
+	videoList, err := l.svcCtx.VideoModel.FindManyByKeyword(l.ctx, in.Page, in.PageSize, in.Keyword)
 	if err != nil {
 		return nil, status.Error(100, err.Error())
 	}

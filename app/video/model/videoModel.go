@@ -36,7 +36,8 @@ type (
 		videoModel
 		FindOneById(ctx context.Context, id int64) (*Video, error)
 		FindVideoTempById(ctx context.Context, id int64) (*VideoTemp, error)
-		FindMany(ctx context.Context, page, pageSize int64, keyword string) ([]*VideoTemp, error)
+		FindManyByKeyword(ctx context.Context, page, pageSize int64, keyword string) ([]*VideoTemp, error)
+		FindMany(ctx context.Context) ([]*Video, error)
 	}
 
 	customVideoModel struct {
@@ -86,8 +87,8 @@ func (c *customVideoModel) FindVideoTempById(ctx context.Context, id int64) (*Vi
 	}
 }
 
-// FindMany 通过页面、页面大小、模糊查询值获取视频列表
-func (c *customVideoModel) FindMany(ctx context.Context, page, pageSize int64, keyword string) ([]*VideoTemp, error) {
+// FindManyByKeyword 通过页面、页面大小、模糊查询值获取视频列表
+func (c *customVideoModel) FindManyByKeyword(ctx context.Context, page, pageSize int64, keyword string) ([]*VideoTemp, error) {
 	var resp []*VideoTemp
 	query := "select v.id, v.create_time, v.update_time, v.title, v.url, v.user_id, u.nickname, v.description, v.like, v.dislike from video v left join user u on v.user_id=u.id where v.delete_time is null and v.status=1"
 	if keyword != "" {
@@ -95,6 +96,21 @@ func (c *customVideoModel) FindMany(ctx context.Context, page, pageSize int64, k
 	}
 	query += " order by v.id desc limit ?,?"
 	err := c.QueryRowsNoCacheCtx(ctx, &resp, query, (page-1)*pageSize, pageSize)
+	switch err {
+	case nil:
+		return resp, nil
+	case sqlc.ErrNotFound:
+		return nil, ErrNotFound
+	default:
+		return nil, err
+	}
+}
+
+// FindMany 查询所有的视频
+func (c *customVideoModel) FindMany(ctx context.Context) ([]*Video, error) {
+	var resp []*Video
+	query := fmt.Sprintf("select %s from %s where delete_time is null and status=1", videoRows, c.table)
+	err := c.QueryRowsNoCacheCtx(ctx, &resp, query)
 	switch err {
 	case nil:
 		return resp, nil

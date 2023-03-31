@@ -36,6 +36,11 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 			},
 			{
 				Method:  http.MethodPost,
+				Path:    "/deleteVideo",
+				Handler: video.DeleteVideoHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
 				Path:    "/likeVideo",
 				Handler: video.LikeVideoHandler(serverCtx),
 			},

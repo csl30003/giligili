@@ -44,6 +44,15 @@ type (
 )
 
 type (
+    DeleteVideoReq {
+        VideoId int64 `json:"videoId"`
+    }
+    DeleteVideoResp {
+        Success bool `json:"success"`
+    }
+)
+
+type (
     UploadVideoReq {
         // file File `form:file`
         Title string `form:"title"`
