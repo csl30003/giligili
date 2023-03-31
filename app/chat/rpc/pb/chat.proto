@@ -7,6 +7,7 @@ option go_package = "./pb";
 service Chat {
   rpc SendChatMessage (SendChatMessageReq) returns (SendChatMessageResp);
   rpc GetChatHistory (GetChatHistoryReq) returns (GetChatHistoryResp);
+  rpc DeleteChatMessage (DeleteChatMessageReq) returns (DeleteChatMessageResp);
 }
 
 message SendChatMessageReq {
@@ -22,6 +23,14 @@ message GetChatHistoryReq {
 }
 message GetChatHistoryResp {
   repeated ChatMessage chatHistory = 1;
+}
+
+message DeleteChatMessageReq {
+  int64 userId = 1;
+  int64 chatId = 2;
+}
+message DeleteChatMessageResp {
+  bool success = 1;
 }
 
 message ChatMessage {

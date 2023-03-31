@@ -23,6 +23,11 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Path:    "/getChatHistory",
 				Handler: chat.GetChatHistoryHandler(serverCtx),
 			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/deleteChatMessage",
+				Handler: chat.DeleteChatMessageHandler(serverCtx),
+			},
 		},
 		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),
 		rest.WithPrefix("/chat/v1"),

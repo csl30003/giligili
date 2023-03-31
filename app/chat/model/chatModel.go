@@ -3,6 +3,7 @@ package model
 import (
 	"context"
 	"database/sql"
+	"fmt"
 	"github.com/zeromicro/go-zero/core/stores/cache"
 	"github.com/zeromicro/go-zero/core/stores/sqlc"
 	"github.com/zeromicro/go-zero/core/stores/sqlx"
@@ -29,6 +30,7 @@ type (
 	// and implement the added methods in customChatModel.
 	ChatModel interface {
 		chatModel
+		FindOneById(ctx context.Context, id int64) (*Chat, error)
 		FindManyByFromUserIdAndToUserId(ctx context.Context, fromUserId, toUserId int64) ([]*ChatTemp, error)
 	}
 
@@ -41,6 +43,21 @@ type (
 func NewChatModel(conn sqlx.SqlConn, c cache.CacheConf) ChatModel {
 	return &customChatModel{
 		defaultChatModel: newChatModel(conn, c),
+	}
+}
+
+// FindOneById 通过 id 获取聊天记录,不走缓存
+func (c *customChatModel) FindOneById(ctx context.Context, id int64) (*Chat, error) {
+	var resp Chat
+	query := fmt.Sprintf("select %s from %s where `id` = ? and delete_time is null limit 1", chatRows, c.table)
+	err := c.QueryRowNoCacheCtx(ctx, &resp, query, id)
+	switch err {
+	case nil:
+		return &resp, nil
+	case sqlc.ErrNotFound:
+		return nil, ErrNotFound
+	default:
+		return nil, err
 	}
 }
 

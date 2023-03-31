@@ -31,3 +31,8 @@ func (s *ChatServer) GetChatHistory(ctx context.Context, in *pb.GetChatHistoryRe
 	l := logic.NewGetChatHistoryLogic(ctx, s.svcCtx)
 	return l.GetChatHistory(in)
 }
+
+func (s *ChatServer) DeleteChatMessage(ctx context.Context, in *pb.DeleteChatMessageReq) (*pb.DeleteChatMessageResp, error) {
+	l := logic.NewDeleteChatMessageLogic(ctx, s.svcCtx)
+	return l.DeleteChatMessage(in)
+}

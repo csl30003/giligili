@@ -24,6 +24,7 @@ const _ = grpc.SupportPackageIsVersion7
 type ChatClient interface {
 	SendChatMessage(ctx context.Context, in *SendChatMessageReq, opts ...grpc.CallOption) (*SendChatMessageResp, error)
 	GetChatHistory(ctx context.Context, in *GetChatHistoryReq, opts ...grpc.CallOption) (*GetChatHistoryResp, error)
+	DeleteChatMessage(ctx context.Context, in *DeleteChatMessageReq, opts ...grpc.CallOption) (*DeleteChatMessageResp, error)
 }
 
 type chatClient struct {
@@ -52,12 +53,22 @@ func (c *chatClient) GetChatHistory(ctx context.Context, in *GetChatHistoryReq, 
 	return out, nil
 }
 
+func (c *chatClient) DeleteChatMessage(ctx context.Context, in *DeleteChatMessageReq, opts ...grpc.CallOption) (*DeleteChatMessageResp, error) {
+	out := new(DeleteChatMessageResp)
+	err := c.cc.Invoke(ctx, "/pb.Chat/DeleteChatMessage", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ChatServer is the server API for Chat service.
 // All implementations must embed UnimplementedChatServer
 // for forward compatibility
 type ChatServer interface {
 	SendChatMessage(context.Context, *SendChatMessageReq) (*SendChatMessageResp, error)
 	GetChatHistory(context.Context, *GetChatHistoryReq) (*GetChatHistoryResp, error)
+	DeleteChatMessage(context.Context, *DeleteChatMessageReq) (*DeleteChatMessageResp, error)
 	mustEmbedUnimplementedChatServer()
 }
 
@@ -70,6 +81,9 @@ func (UnimplementedChatServer) SendChatMessage(context.Context, *SendChatMessage
 }
 func (UnimplementedChatServer) GetChatHistory(context.Context, *GetChatHistoryReq) (*GetChatHistoryResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetChatHistory not implemented")
+}
+func (UnimplementedChatServer) DeleteChatMessage(context.Context, *DeleteChatMessageReq) (*DeleteChatMessageResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteChatMessage not implemented")
 }
 func (UnimplementedChatServer) mustEmbedUnimplementedChatServer() {}
 
@@ -120,6 +134,24 @@ func _Chat_GetChatHistory_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Chat_DeleteChatMessage_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteChatMessageReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ChatServer).DeleteChatMessage(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/pb.Chat/DeleteChatMessage",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ChatServer).DeleteChatMessage(ctx, req.(*DeleteChatMessageReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Chat_ServiceDesc is the grpc.ServiceDesc for Chat service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -134,6 +166,10 @@ var Chat_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetChatHistory",
 			Handler:    _Chat_GetChatHistory_Handler,
+		},
+		{
+			MethodName: "DeleteChatMessage",
+			Handler:    _Chat_DeleteChatMessage_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

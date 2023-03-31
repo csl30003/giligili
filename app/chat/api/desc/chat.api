@@ -28,4 +28,9 @@ service chat {
 	@doc "get chat history"
 	@handler getChatHistory
 	get /getChatHistory (GetChatHistoryReq) returns (GetChatHistoryResp)
+	
+	// 删除聊天记录
+	@doc "delete chat message"
+	@handler deleteChatMessage
+	post /deleteChatMessage (DeleteChatMessageReq) returns (DeleteChatMessageResp)
 }
