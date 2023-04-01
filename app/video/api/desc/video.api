@@ -64,4 +64,9 @@ service video {
 	@doc "undislike video"
 	@handler undislikeVideo
 	post /undislikeVideo (UndislikeVideoReq) returns (UndislikeVideoResp)
+	
+	// 发送弹幕
+	@doc "send barrage"
+	@handler sendBarrage
+	post /sendBarrage (SendBarrageReq) returns (SendBarrageResp)
 }

@@ -19,3 +19,16 @@ VideoRpcConf:
     Hosts:
       - 127.0.0.1:2379
     Key: video.rpc
+
+RqSendBarrageConf:
+  Username: guest
+  Password: guest
+  Host: 127.0.0.1
+  Port: 5672
+
+ExchangeConf:
+  ExchangeName: barrageExchange
+  Type: direct
+  Queues:
+    -
+      Name: barrageQueue

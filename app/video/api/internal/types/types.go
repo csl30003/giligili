@@ -80,3 +80,14 @@ type UndislikeVideoReq struct {
 type UndislikeVideoResp struct {
 	Success bool `json:"success"`
 }
+
+type SendBarrageReq struct {
+	VideoId int64  `json:"videoId"`
+	Text    string `json:"text"`
+	Color   int64  `json:"color"`
+	Type    int64  `json:"type"`
+}
+
+type SendBarrageResp struct {
+	Success bool `json:"success"`
+}

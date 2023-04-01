@@ -98,3 +98,15 @@ type (
         Success bool `json:"success"`
     }
 )
+
+type (
+    SendBarrageReq {
+        VideoId int64 `json:"videoId"`
+        Text string `json:"text"`
+        Color int64 `json:"color"`
+        Type int64 `json:"type"`
+    }
+    SendBarrageResp {
+        Success bool `json:"success"`
+    }
+)
