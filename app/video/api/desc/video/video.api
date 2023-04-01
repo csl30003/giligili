@@ -105,6 +105,7 @@ type (
         Text string `json:"text"`
         Color int64 `json:"color"`
         Type int64 `json:"type"`
+        Timestamp int64 `json:"timestamp"`
     }
     SendBarrageResp {
         Success bool `json:"success"`

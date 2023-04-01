@@ -3,6 +3,7 @@ package video
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"giligili/common/ctxData"
 
 	"giligili/app/video/api/internal/svc"
@@ -29,12 +30,25 @@ func NewSendBarrageLogic(ctx context.Context, svcCtx *svc.ServiceContext) *SendB
 func (l *SendBarrageLogic) SendBarrage(req *types.SendBarrageReq) (resp *types.SendBarrageResp, err error) {
 	userId := ctxData.GetUserIdFromCtx(l.ctx)
 
+	if !isColor(req.Color) {
+		return nil, errors.New("弹幕颜色值错误")
+	}
+
+	if req.Type < 0 || req.Type > 2 {
+		return nil, errors.New("弹幕类型错误")
+	}
+
+	if req.Timestamp < 0 {
+		return nil, errors.New("弹幕时间戳错误")
+	}
+
 	data := map[string]interface{}{
-		"userId":  userId,
-		"videoId": req.VideoId,
-		"text":    req.Text,
-		"color":   req.Color,
-		"type":    req.Type,
+		"userId":    userId,
+		"videoId":   req.VideoId,
+		"text":      req.Text,
+		"color":     req.Color,
+		"type":      req.Type,
+		"timestamp": req.Timestamp,
 	}
 	msg, _ := json.Marshal(data)
 
@@ -49,4 +63,12 @@ func (l *SendBarrageLogic) SendBarrage(req *types.SendBarrageReq) (resp *types.S
 	}
 
 	return &types.SendBarrageResp{Success: true}, nil
+}
+
+// isColor 判断十进制数字是否代表一个颜色
+func isColor(num int64) bool {
+	if num >= 0 && num <= 16777215 {
+		return true
+	}
+	return false
 }

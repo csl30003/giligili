@@ -82,10 +82,11 @@ type UndislikeVideoResp struct {
 }
 
 type SendBarrageReq struct {
-	VideoId int64  `json:"videoId"`
-	Text    string `json:"text"`
-	Color   int64  `json:"color"`
-	Type    int64  `json:"type"`
+	VideoId   int64  `json:"videoId"`
+	Text      string `json:"text"`
+	Color     int64  `json:"color"`
+	Type      int64  `json:"type"`
+	Timestamp int64  `json:"timestamp"`
 }
 
 type SendBarrageResp struct {

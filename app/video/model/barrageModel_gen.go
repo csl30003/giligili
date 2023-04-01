@@ -44,9 +44,11 @@ type (
 		DeleteTime   sql.NullTime `db:"delete_time"`   // 删除时间
 		UserId       int64        `db:"user_id"`       // 用户ID
 		UserNickname string       `db:"user_nickname"` // 用户昵称
+		VideoId      int64        `db:"video_id"`      // 视频ID
 		Text         string       `db:"text"`          // 弹幕内容
 		Color        int64        `db:"color"`         // 弹幕颜色
 		Type         int64        `db:"type"`          // 弹幕类型，0表示滚动弹幕，1表示顶部弹幕，2表示底部弹幕
+		Timestamp    int64        `db:"timestamp"`     // 弹幕出现时间（秒）
 	}
 )
 
@@ -86,8 +88,8 @@ func (m *defaultBarrageModel) FindOne(ctx context.Context, id int64) (*Barrage, 
 func (m *defaultBarrageModel) Insert(ctx context.Context, data *Barrage) (sql.Result, error) {
 	giligiliBarrageIdKey := fmt.Sprintf("%s%v", cacheGiligiliBarrageIdPrefix, data.Id)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
-		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?)", m.table, barrageRowsExpectAutoSet)
-		return conn.ExecCtx(ctx, query, data.DeleteTime, data.UserId, data.UserNickname, data.Text, data.Color, data.Type)
+		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?)", m.table, barrageRowsExpectAutoSet)
+		return conn.ExecCtx(ctx, query, data.DeleteTime, data.UserId, data.UserNickname, data.VideoId, data.Text, data.Color, data.Type, data.Timestamp)
 	}, giligiliBarrageIdKey)
 	return ret, err
 }
@@ -96,7 +98,7 @@ func (m *defaultBarrageModel) Update(ctx context.Context, data *Barrage) error {
 	giligiliBarrageIdKey := fmt.Sprintf("%s%v", cacheGiligiliBarrageIdPrefix, data.Id)
 	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, barrageRowsWithPlaceHolder)
-		return conn.ExecCtx(ctx, query, data.DeleteTime, data.UserId, data.UserNickname, data.Text, data.Color, data.Type, data.Id)
+		return conn.ExecCtx(ctx, query, data.DeleteTime, data.UserId, data.UserNickname, data.VideoId, data.Text, data.Color, data.Type, data.Timestamp, data.Id)
 	}, giligiliBarrageIdKey)
 	return err
 }
