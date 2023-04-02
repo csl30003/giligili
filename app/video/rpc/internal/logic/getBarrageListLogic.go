@@ -40,20 +40,22 @@ func (l *GetBarrageListLogic) GetBarrageList(in *pb.GetBarrageListReq) (*pb.GetB
 
 	// 先从 Redis 中获取缓存数据
 	key := fmt.Sprintf("%s%d", redisConstant.BarrageListKeyPrefix, in.VideoId)
-	rst, err := l.svcCtx.RedisClient.Get(l.ctx, key).Result()
-	if err != nil && err != redis.Nil {
+	rst, err := l.svcCtx.RedisClient.ZRevRange(l.ctx, key, 0, -1).Result()
+	if err != nil {
 		return nil, status.Error(100, "Redis 查询弹幕列表失败")
 	}
-	if err != redis.Nil {
+	if len(rst) != 0 {
 		// 如果 Redis 中有缓存数据，直接返回
 		var barrageList []*pb.BarrageInfo
-		err = json.Unmarshal([]byte(rst), &barrageList)
-		if err != nil {
-			return nil, status.Error(100, "解析 Redis 中的弹幕列表失败")
+		for _, v := range rst {
+			var barrageInfo pb.BarrageInfo
+			err := json.Unmarshal([]byte(v), &barrageInfo)
+			if err != nil {
+				return nil, status.Error(100, "解析 Redis 中的弹幕列表失败")
+			}
+			barrageList = append(barrageList, &barrageInfo)
 		}
-		// 更新 Redis 中缓存的过期时间
-		l.svcCtx.RedisClient.Expire(l.ctx, key, redisConstant.BarrageListExpire)
-
+		fmt.Println("从缓存拿数据了")
 		return &pb.GetBarrageListResp{BarrageList: barrageList}, nil
 	}
 
@@ -72,7 +74,8 @@ func (l *GetBarrageListLogic) GetBarrageList(in *pb.GetBarrageListReq) (*pb.GetB
 	// 将查询到的数据缓存到 Redis
 	var barragePbList []*pb.BarrageInfo
 	for _, barrage := range barrageList {
-		barragePbList = append(barragePbList, &pb.BarrageInfo{
+		key := fmt.Sprintf("%s%d", redisConstant.BarrageListKeyPrefix, in.VideoId)
+		barragePb := &pb.BarrageInfo{
 			BarrageId:    barrage.Id,
 			UserId:       barrage.UserId,
 			UserNickname: barrage.UserNickname,
@@ -80,15 +83,18 @@ func (l *GetBarrageListLogic) GetBarrageList(in *pb.GetBarrageListReq) (*pb.GetB
 			Color:        barrage.Color,
 			Type:         barrage.Type,
 			Timestamp:    barrage.Timestamp,
-		})
+		}
+		barrageJson, err := json.Marshal(barragePb)
+		if err != nil {
+			return nil, status.Error(100, "弹幕列表转 JSON 失败")
+		}
+		err = l.svcCtx.RedisClient.ZAdd(l.ctx, key, &redis.Z{Member: barrageJson, Score: float64(barrage.Timestamp)}).Err()
+		if err != nil {
+			return nil, status.Error(100, "弹幕列表缓存 Redis 失败")
+		}
+		barragePbList = append(barragePbList, barragePb)
 	}
-	barrageJson, err := json.Marshal(barragePbList)
-	if err != nil {
-		return nil, status.Error(100, "弹幕列表转 JSON 失败")
-	}
-	err = l.svcCtx.RedisClient.Set(l.ctx, key, barrageJson, redisConstant.BarrageListExpire).Err()
-	if err != nil {
-		return nil, status.Error(100, "弹幕列表缓存 Redis 失败")
-	}
+	l.svcCtx.RedisClient.Expire(l.ctx, key, redisConstant.BarrageListExpire)
+	fmt.Println("从数据库拿数据了")
 	return &pb.GetBarrageListResp{BarrageList: barragePbList}, nil
 }
