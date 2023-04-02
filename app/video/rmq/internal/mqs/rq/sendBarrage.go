@@ -4,10 +4,14 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"fmt"
 	user2 "giligili/app/user/rpc/user"
 	"giligili/app/video/model"
 	"giligili/app/video/rmq/internal/svc"
 	"giligili/app/video/rmq/internal/types"
+	"giligili/app/video/rpc/pb"
+	"giligili/common/redisConstant"
+	"github.com/go-redis/redis/v8"
 	"github.com/zeromicro/go-zero/core/stores/sqlx"
 )
 
@@ -57,10 +61,37 @@ func (l *SendBarrageMq) Consume(message string) error {
 	if err != nil {
 		return err
 	}
-
 	newBarrage.Id, err = result.LastInsertId()
 	if err != nil {
 		return err
+	}
+
+	// 如果 redis 里有该视频的弹幕缓存，就把该弹幕添加至缓存
+	key := fmt.Sprintf("%s%d", redisConstant.BarrageListKeyPrefix, barrage.VideoId)
+	cached, err := l.svcCtx.RedisClient.Exists(l.ctx, key).Result()
+	if err != nil {
+		return err
+	}
+	if cached == 1 {
+		barragePb := &pb.BarrageInfo{
+			BarrageId:    newBarrage.Id,
+			UserId:       newBarrage.UserId,
+			UserNickname: newBarrage.UserNickname,
+			Text:         newBarrage.Text,
+			Color:        newBarrage.Color,
+			Type:         newBarrage.Type,
+			Timestamp:    newBarrage.Timestamp,
+		}
+		barrageJson, err := json.Marshal(barragePb)
+
+		// 插入
+		err = l.svcCtx.RedisClient.ZAdd(l.ctx, key, &redis.Z{
+			Score:  float64(barrage.Timestamp),
+			Member: barrageJson,
+		}).Err()
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil

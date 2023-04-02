@@ -55,7 +55,6 @@ func (l *GetBarrageListLogic) GetBarrageList(in *pb.GetBarrageListReq) (*pb.GetB
 			}
 			barrageList = append(barrageList, &barrageInfo)
 		}
-		fmt.Println("从缓存拿数据了")
 		return &pb.GetBarrageListResp{BarrageList: barrageList}, nil
 	}
 
@@ -95,6 +94,5 @@ func (l *GetBarrageListLogic) GetBarrageList(in *pb.GetBarrageListReq) (*pb.GetB
 		barragePbList = append(barragePbList, barragePb)
 	}
 	l.svcCtx.RedisClient.Expire(l.ctx, key, redisConstant.BarrageListExpire)
-	fmt.Println("从数据库拿数据了")
 	return &pb.GetBarrageListResp{BarrageList: barragePbList}, nil
 }
