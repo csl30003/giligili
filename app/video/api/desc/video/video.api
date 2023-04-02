@@ -44,11 +44,23 @@ type (
 )
 
 type (
-    DeleteVideoReq {
+    Barrage {
+        BarrageId int64 `json:"barrageId"`
+        UserId int64 `json:"userId"`
+        UserNickname string `json:"userNickname"`
+        Text string `json:"text"`
+        Color int64 `json:"color"`
+        Type int64 `json:"type"`
+        Timestamp int64 `json:"timestamp"`
+    }
+)
+
+type (
+    GetBarrageListReq {
         VideoId int64 `json:"videoId"`
     }
-    DeleteVideoResp {
-        Success bool `json:"success"`
+    GetBarrageListResp {
+        BarrageList []Barrage `json:"barrageList"`
     }
 )
 
@@ -62,6 +74,16 @@ type (
         Success bool `json:"success"`
     }
 )
+
+type (
+    DeleteVideoReq {
+        VideoId int64 `json:"videoId"`
+    }
+    DeleteVideoResp {
+        Success bool `json:"success"`
+    }
+)
+
 
 type (
     LikeVideoReq {

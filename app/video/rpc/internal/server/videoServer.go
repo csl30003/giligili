@@ -61,3 +61,8 @@ func (s *VideoServer) UndislikeVideo(ctx context.Context, in *pb.UndislikeVideoR
 	l := logic.NewUndislikeVideoLogic(ctx, s.svcCtx)
 	return l.UndislikeVideo(in)
 }
+
+func (s *VideoServer) GetBarrageList(ctx context.Context, in *pb.GetBarrageListReq) (*pb.GetBarrageListResp, error) {
+	l := logic.NewGetBarrageListLogic(ctx, s.svcCtx)
+	return l.GetBarrageList(in)
+}

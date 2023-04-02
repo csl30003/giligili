@@ -26,6 +26,11 @@ service video {
 	@doc "get video detail"
 	@handler getVideoDetail
 	get /getVideoDetail (GetVideoDetailReq) returns (GetVideoDetailResp)
+	
+	// 获取一条视频的弹幕
+	@doc "get barrage list"
+	@handler getBarrageList
+	get /getBarrageList (GetBarrageListReq) returns (GetBarrageListResp)
 }
 
 // 用户操作需要登录

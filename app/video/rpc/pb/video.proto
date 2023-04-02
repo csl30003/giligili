@@ -13,6 +13,7 @@ service Video {
   rpc UnlikeVideo (UnlikeVideoReq) returns (UnlikeVideoResp);
   rpc DislikeVideo (DislikeVideoReq) returns (DislikeVideoResp);
   rpc UndislikeVideo (UndislikeVideoReq) returns (UndislikeVideoResp);
+  rpc GetBarrageList (GetBarrageListReq) returns (GetBarrageListResp);
 }
 
 message VideoInfo {
@@ -28,7 +29,6 @@ message VideoInfo {
   string create_time = 10;
   string update_time = 11;
 }
-
 message GetVideoListReq {
   int64 page = 1;
   int64 page_size = 2;
@@ -43,6 +43,22 @@ message GetVideoDetailReq {
 }
 message GetVideoDetailResp {
   VideoInfo video = 1;
+}
+
+message BarrageInfo {
+  int64 barrage_id = 1;
+  int64 user_id = 2;
+  string user_nickname = 3;
+  string text = 4;
+  int64 color = 5;
+  int64 type = 6;
+  int64 timestamp = 7;
+}
+message GetBarrageListReq {
+  int64 video_id = 1;
+}
+message GetBarrageListResp {
+  repeated BarrageInfo barrage_list = 1;
 }
 
 message UploadVideoReq {

@@ -13,10 +13,13 @@ import (
 )
 
 type (
+	BarrageInfo        = pb.BarrageInfo
 	DeleteVideoReq     = pb.DeleteVideoReq
 	DeleteVideoResp    = pb.DeleteVideoResp
 	DislikeVideoReq    = pb.DislikeVideoReq
 	DislikeVideoResp   = pb.DislikeVideoResp
+	GetBarrageListReq  = pb.GetBarrageListReq
+	GetBarrageListResp = pb.GetBarrageListResp
 	GetVideoDetailReq  = pb.GetVideoDetailReq
 	GetVideoDetailResp = pb.GetVideoDetailResp
 	GetVideoListReq    = pb.GetVideoListReq
@@ -40,6 +43,7 @@ type (
 		UnlikeVideo(ctx context.Context, in *UnlikeVideoReq, opts ...grpc.CallOption) (*UnlikeVideoResp, error)
 		DislikeVideo(ctx context.Context, in *DislikeVideoReq, opts ...grpc.CallOption) (*DislikeVideoResp, error)
 		UndislikeVideo(ctx context.Context, in *UndislikeVideoReq, opts ...grpc.CallOption) (*UndislikeVideoResp, error)
+		GetBarrageList(ctx context.Context, in *GetBarrageListReq, opts ...grpc.CallOption) (*GetBarrageListResp, error)
 	}
 
 	defaultVideo struct {
@@ -91,4 +95,9 @@ func (m *defaultVideo) DislikeVideo(ctx context.Context, in *DislikeVideoReq, op
 func (m *defaultVideo) UndislikeVideo(ctx context.Context, in *UndislikeVideoReq, opts ...grpc.CallOption) (*UndislikeVideoResp, error) {
 	client := pb.NewVideoClient(m.cli.Conn())
 	return client.UndislikeVideo(ctx, in, opts...)
+}
+
+func (m *defaultVideo) GetBarrageList(ctx context.Context, in *GetBarrageListReq, opts ...grpc.CallOption) (*GetBarrageListResp, error) {
+	client := pb.NewVideoClient(m.cli.Conn())
+	return client.GetBarrageList(ctx, in, opts...)
 }

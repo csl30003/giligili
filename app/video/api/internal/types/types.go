@@ -32,12 +32,22 @@ type GetVideoDetailResp struct {
 	Video Video `json:"video"`
 }
 
-type DeleteVideoReq struct {
+type Barrage struct {
+	BarrageId    int64  `json:"barrageId"`
+	UserId       int64  `json:"userId"`
+	UserNickname string `json:"userNickname"`
+	Text         string `json:"text"`
+	Color        int64  `json:"color"`
+	Type         int64  `json:"type"`
+	Timestamp    int64  `json:"timestamp"`
+}
+
+type GetBarrageListReq struct {
 	VideoId int64 `json:"videoId"`
 }
 
-type DeleteVideoResp struct {
-	Success bool `json:"success"`
+type GetBarrageListResp struct {
+	BarrageList []Barrage `json:"barrageList"`
 }
 
 type UploadVideoReq struct {
@@ -46,6 +56,14 @@ type UploadVideoReq struct {
 }
 
 type UploadVideoResp struct {
+	Success bool `json:"success"`
+}
+
+type DeleteVideoReq struct {
+	VideoId int64 `json:"videoId"`
+}
+
+type DeleteVideoResp struct {
 	Success bool `json:"success"`
 }
 
