@@ -14,6 +14,7 @@ service Video {
   rpc DislikeVideo (DislikeVideoReq) returns (DislikeVideoResp);
   rpc UndislikeVideo (UndislikeVideoReq) returns (UndislikeVideoResp);
   rpc GetBarrageList (GetBarrageListReq) returns (GetBarrageListResp);
+  rpc GetHotVideoList (GetHotVideoListReq) returns (GetHotVideoListResp);
 }
 
 message VideoInfo {
@@ -25,9 +26,8 @@ message VideoInfo {
   string description = 6;
   int64 like_count = 7;
   int64 dislike_count = 8;
-  int64 comment_count = 9;
-  string create_time = 10;
-  string update_time = 11;
+  string create_time = 9;
+  string update_time = 10;
 }
 message GetVideoListReq {
   int64 page = 1;
@@ -110,4 +110,23 @@ message UndislikeVideoReq {
 }
 message UndislikeVideoResp {
   bool success = 1;
+}
+
+message HotVideoInfo {
+  int64 video_id = 1;
+  string title = 2;
+  string url = 3;
+  int64 user_id = 4;
+  string user_nickname = 5;
+  string description = 6;
+  int64 like_count = 7;
+  int64 dislike_count = 8;
+  string create_time = 9;
+  string update_time = 10;
+  int64 hot_index = 11;
+}
+
+message GetHotVideoListReq {}
+message GetHotVideoListResp {
+  repeated HotVideoInfo hot_video_list = 1;
 }

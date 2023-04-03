@@ -50,6 +50,24 @@ type GetBarrageListResp struct {
 	BarrageList []Barrage `json:"barrageList"`
 }
 
+type HotVideo struct {
+	VideoId      int64  `json:"videoId"`
+	Title        string `json:"title"`
+	Url          string `json:"url"`
+	UserId       int64  `json:"userId"`
+	UserNickname string `json:"userNickname"`
+	Description  string `json:"description"`
+	LikeCount    int64  `json:"likeCount"`
+	DislikeCount int64  `json:"dislikeCount"`
+	CreateTime   string `json:"createTime"`
+	UpdateTime   string `json:"updateTime"`
+	HotIndex     int64  `json:"hotIndex"`
+}
+
+type GetHotVideoListResp struct {
+	HotVideoList []HotVideo `json:"hotVideoList"`
+}
+
 type UploadVideoReq struct {
 	Title       string `form:"title"`
 	Description string `form:"description"`

@@ -28,6 +28,11 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Path:    "/getBarrageList",
 				Handler: video.GetBarrageListHandler(serverCtx),
 			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/getHotVideoList",
+				Handler: video.GetHotVideoListHandler(serverCtx),
+			},
 		},
 		rest.WithPrefix("/video/v1"),
 	)

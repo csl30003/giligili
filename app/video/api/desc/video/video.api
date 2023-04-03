@@ -65,6 +65,28 @@ type (
 )
 
 type (
+    HotVideo {
+        VideoId int64 `json:"videoId"`
+        Title string `json:"title"`
+        Url string `json:"url"`
+        UserId int64 `json:"userId"`
+        UserNickname string `json:"userNickname"`
+        Description string `json:"description"`
+        LikeCount int64 `json:"likeCount"`
+        DislikeCount int64 `json:"dislikeCount"`
+        CreateTime string `json:"createTime"`
+        UpdateTime string `json:"updateTime"`
+        HotIndex int64 `json:"hotIndex"`
+    }
+)
+
+type (
+    GetHotVideoListResp {
+        HotVideoList []HotVideo `json:"hotVideoList"`
+    }
+)
+
+type (
     UploadVideoReq {
         // file File `form:file`
         Title string `form:"title"`

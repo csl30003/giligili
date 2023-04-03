@@ -39,6 +39,7 @@ type (
 		FindVideoTempById(ctx context.Context, id int64) (*VideoTemp, error)
 		FindManyByKeyword(ctx context.Context, page, pageSize int64, keyword string) ([]*VideoTemp, error)
 		FindMany(ctx context.Context) ([]*Video, error)
+		FindManyByLimitDesc(ctx context.Context, limit int64) ([]*VideoTemp, error)
 	}
 
 	customVideoModel struct {
@@ -131,6 +132,21 @@ func (c *customVideoModel) FindMany(ctx context.Context) ([]*Video, error) {
 	var resp []*Video
 	query := fmt.Sprintf("select %s from %s where delete_time is null and status=1", videoRows, c.table)
 	err := c.QueryRowsNoCacheCtx(ctx, &resp, query)
+	switch err {
+	case nil:
+		return resp, nil
+	case sqlc.ErrNotFound:
+		return nil, ErrNotFound
+	default:
+		return nil, err
+	}
+}
+
+// FindManyByLimitDesc 降序获得部分视频列表
+func (c *customVideoModel) FindManyByLimitDesc(ctx context.Context, limit int64) ([]*VideoTemp, error) {
+	var resp []*VideoTemp
+	query := "select v.id, v.create_time, v.update_time, v.title, v.url, v.user_id, u.nickname, v.description, v.like, v.dislike from video v left join user u on v.user_id=u.id where v.delete_time is null and v.status=1 order by v.id desc limit ?"
+	err := c.QueryRowsNoCacheCtx(ctx, &resp, query, limit)
 	switch err {
 	case nil:
 		return resp, nil

@@ -66,3 +66,8 @@ func (s *VideoServer) GetBarrageList(ctx context.Context, in *pb.GetBarrageListR
 	l := logic.NewGetBarrageListLogic(ctx, s.svcCtx)
 	return l.GetBarrageList(in)
 }
+
+func (s *VideoServer) GetHotVideoList(ctx context.Context, in *pb.GetHotVideoListReq) (*pb.GetHotVideoListResp, error) {
+	l := logic.NewGetHotVideoListLogic(ctx, s.svcCtx)
+	return l.GetHotVideoList(in)
+}

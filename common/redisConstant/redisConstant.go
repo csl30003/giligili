@@ -10,4 +10,6 @@ const (
 	RankingListKeyPrefix  = "cache:giligili:video:rankingList:"
 	BarrageListKeyPrefix  = "cache:giligili:video:barrageList:"
 	BarrageListExpire     = time.Minute * 5
+	HotVideoListKey       = "cache:giligili:video:hotVideoList"
+	HotVideoListExpire    = time.Minute * 5
 )

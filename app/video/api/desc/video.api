@@ -12,7 +12,7 @@ import (
 	"video/video.api"
 )
 
-@server (
+@server(
 	prefix: video/v1
 	group: video
 )
@@ -31,10 +31,15 @@ service video {
 	@doc "get barrage list"
 	@handler getBarrageList
 	get /getBarrageList (GetBarrageListReq) returns (GetBarrageListResp)
+	
+	// 获取热门视频列表
+	@doc "get hot video list"
+	@handler getHotVideoList
+	get /getHotVideoList () returns (GetHotVideoListResp)
 }
 
 // 用户操作需要登录
-@server (
+@server(
 	prefix: video/v1
 	group: video
 	jwt: Auth
