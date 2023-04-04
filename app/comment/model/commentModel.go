@@ -2,6 +2,7 @@ package model
 
 import (
 	"context"
+	"fmt"
 	"github.com/zeromicro/go-zero/core/stores/cache"
 	"github.com/zeromicro/go-zero/core/stores/sqlc"
 	"github.com/zeromicro/go-zero/core/stores/sqlx"
@@ -28,6 +29,7 @@ type (
 	CommentModel interface {
 		commentModel
 		FindManyByVideoId(ctx context.Context, videoId int64) ([]*VideoCommentTemp, error)
+		FindManyByCommentId(ctx context.Context, commentId int64) ([]*Comment, error)
 	}
 
 	customCommentModel struct {
@@ -45,8 +47,22 @@ func NewCommentModel(conn sqlx.SqlConn, c cache.CacheConf) CommentModel {
 // FindManyByVideoId 根据视频 id 获取评论列表
 func (c *customCommentModel) FindManyByVideoId(ctx context.Context, videoId int64) ([]*VideoCommentTemp, error) {
 	var resp []*VideoCommentTemp
-	query := "select c.id, c.user_id, c.content, c.like, c.dislike, COUNT(reply.id) as reply_count, c.create_time, c.update_time from comment as c left join comment as reply on c.id = reply.reply_id where c.video_id = ? and c.delete_time is null group by c.id"
+	query := "select c.id, c.user_id, c.content, c.like, c.dislike, COUNT(reply.id) as reply_count, c.create_time, c.update_time from comment as c left join comment as reply on c.id = reply.reply_id where c.video_id = ? and c.reply_id is null and c.delete_time is null group by c.id"
 	err := c.QueryRowsNoCacheCtx(ctx, &resp, query, videoId)
+	switch err {
+	case nil:
+		return resp, nil
+	case sqlc.ErrNotFound:
+		return nil, ErrNotFound
+	default:
+		return nil, err
+	}
+}
+
+func (c *customCommentModel) FindManyByCommentId(ctx context.Context, commentId int64) ([]*Comment, error) {
+	var resp []*Comment
+	query := fmt.Sprintf("select %s from %s where `reply_id` = ? and delete_time is null", commentRows, c.table)
+	err := c.QueryRowsNoCacheCtx(ctx, &resp, query, commentId)
 	switch err {
 	case nil:
 		return resp, nil
