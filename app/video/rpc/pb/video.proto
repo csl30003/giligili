@@ -15,6 +15,7 @@ service Video {
   rpc UndislikeVideo (UndislikeVideoReq) returns (UndislikeVideoResp);
   rpc GetBarrageList (GetBarrageListReq) returns (GetBarrageListResp);
   rpc GetHotVideoList (GetHotVideoListReq) returns (GetHotVideoListResp);
+  rpc IsExistVideo (IsExistVideoReq) returns (IsExistVideoResp);
 }
 
 message VideoInfo {
@@ -129,4 +130,11 @@ message HotVideoInfo {
 message GetHotVideoListReq {}
 message GetHotVideoListResp {
   repeated HotVideoInfo hot_video_list = 1;
+}
+
+message IsExistVideoReq {
+  int64 video_id = 1;
+}
+message IsExistVideoResp {
+  bool exists = 1;
 }

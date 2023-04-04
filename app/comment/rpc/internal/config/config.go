@@ -11,5 +11,6 @@ type Config struct {
 	MySQL struct {
 		DataSource string
 	}
-	Cache cache.CacheConf
+	Cache        cache.CacheConf
+	VideoRpcConf zrpc.RpcClientConf
 }

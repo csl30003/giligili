@@ -18,3 +18,9 @@ MySQL:
 Cache:
   - Host: 127.0.0.1:6379
     Pass: csl_520520
+
+VideoRpcConf:
+  Etcd:
+    Hosts:
+      - 127.0.0.1:2379
+    Key: video.rpc

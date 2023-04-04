@@ -71,3 +71,8 @@ func (s *VideoServer) GetHotVideoList(ctx context.Context, in *pb.GetHotVideoLis
 	l := logic.NewGetHotVideoListLogic(ctx, s.svcCtx)
 	return l.GetHotVideoList(in)
 }
+
+func (s *VideoServer) IsExistVideo(ctx context.Context, in *pb.IsExistVideoReq) (*pb.IsExistVideoResp, error) {
+	l := logic.NewIsExistVideoLogic(ctx, s.svcCtx)
+	return l.IsExistVideo(in)
+}

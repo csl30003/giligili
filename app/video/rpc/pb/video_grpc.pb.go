@@ -32,6 +32,7 @@ type VideoClient interface {
 	UndislikeVideo(ctx context.Context, in *UndislikeVideoReq, opts ...grpc.CallOption) (*UndislikeVideoResp, error)
 	GetBarrageList(ctx context.Context, in *GetBarrageListReq, opts ...grpc.CallOption) (*GetBarrageListResp, error)
 	GetHotVideoList(ctx context.Context, in *GetHotVideoListReq, opts ...grpc.CallOption) (*GetHotVideoListResp, error)
+	IsExistVideo(ctx context.Context, in *IsExistVideoReq, opts ...grpc.CallOption) (*IsExistVideoResp, error)
 }
 
 type videoClient struct {
@@ -132,6 +133,15 @@ func (c *videoClient) GetHotVideoList(ctx context.Context, in *GetHotVideoListRe
 	return out, nil
 }
 
+func (c *videoClient) IsExistVideo(ctx context.Context, in *IsExistVideoReq, opts ...grpc.CallOption) (*IsExistVideoResp, error) {
+	out := new(IsExistVideoResp)
+	err := c.cc.Invoke(ctx, "/pb.Video/IsExistVideo", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // VideoServer is the server API for Video service.
 // All implementations must embed UnimplementedVideoServer
 // for forward compatibility
@@ -146,6 +156,7 @@ type VideoServer interface {
 	UndislikeVideo(context.Context, *UndislikeVideoReq) (*UndislikeVideoResp, error)
 	GetBarrageList(context.Context, *GetBarrageListReq) (*GetBarrageListResp, error)
 	GetHotVideoList(context.Context, *GetHotVideoListReq) (*GetHotVideoListResp, error)
+	IsExistVideo(context.Context, *IsExistVideoReq) (*IsExistVideoResp, error)
 	mustEmbedUnimplementedVideoServer()
 }
 
@@ -182,6 +193,9 @@ func (UnimplementedVideoServer) GetBarrageList(context.Context, *GetBarrageListR
 }
 func (UnimplementedVideoServer) GetHotVideoList(context.Context, *GetHotVideoListReq) (*GetHotVideoListResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetHotVideoList not implemented")
+}
+func (UnimplementedVideoServer) IsExistVideo(context.Context, *IsExistVideoReq) (*IsExistVideoResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method IsExistVideo not implemented")
 }
 func (UnimplementedVideoServer) mustEmbedUnimplementedVideoServer() {}
 
@@ -376,6 +390,24 @@ func _Video_GetHotVideoList_Handler(srv interface{}, ctx context.Context, dec fu
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Video_IsExistVideo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(IsExistVideoReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(VideoServer).IsExistVideo(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/pb.Video/IsExistVideo",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(VideoServer).IsExistVideo(ctx, req.(*IsExistVideoReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Video_ServiceDesc is the grpc.ServiceDesc for Video service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -422,6 +454,10 @@ var Video_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetHotVideoList",
 			Handler:    _Video_GetHotVideoList_Handler,
+		},
+		{
+			MethodName: "IsExistVideo",
+			Handler:    _Video_IsExistVideo_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

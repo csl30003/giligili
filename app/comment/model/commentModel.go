@@ -59,6 +59,7 @@ func (c *customCommentModel) FindManyByVideoId(ctx context.Context, videoId int6
 	}
 }
 
+// FindManyByCommentId 通过评论 id 获取评论列表
 func (c *customCommentModel) FindManyByCommentId(ctx context.Context, commentId int64) ([]*Comment, error) {
 	var resp []*Comment
 	query := fmt.Sprintf("select %s from %s where `reply_id` = ? and delete_time is null", commentRows, c.table)

@@ -27,6 +27,8 @@ type (
 	GetVideoListReq     = pb.GetVideoListReq
 	GetVideoListResp    = pb.GetVideoListResp
 	HotVideoInfo        = pb.HotVideoInfo
+	IsExistVideoReq     = pb.IsExistVideoReq
+	IsExistVideoResp    = pb.IsExistVideoResp
 	LikeVideoReq        = pb.LikeVideoReq
 	LikeVideoResp       = pb.LikeVideoResp
 	UndislikeVideoReq   = pb.UndislikeVideoReq
@@ -48,6 +50,7 @@ type (
 		UndislikeVideo(ctx context.Context, in *UndislikeVideoReq, opts ...grpc.CallOption) (*UndislikeVideoResp, error)
 		GetBarrageList(ctx context.Context, in *GetBarrageListReq, opts ...grpc.CallOption) (*GetBarrageListResp, error)
 		GetHotVideoList(ctx context.Context, in *GetHotVideoListReq, opts ...grpc.CallOption) (*GetHotVideoListResp, error)
+		IsExistVideo(ctx context.Context, in *IsExistVideoReq, opts ...grpc.CallOption) (*IsExistVideoResp, error)
 	}
 
 	defaultVideo struct {
@@ -109,4 +112,9 @@ func (m *defaultVideo) GetBarrageList(ctx context.Context, in *GetBarrageListReq
 func (m *defaultVideo) GetHotVideoList(ctx context.Context, in *GetHotVideoListReq, opts ...grpc.CallOption) (*GetHotVideoListResp, error) {
 	client := pb.NewVideoClient(m.cli.Conn())
 	return client.GetHotVideoList(ctx, in, opts...)
+}
+
+func (m *defaultVideo) IsExistVideo(ctx context.Context, in *IsExistVideoReq, opts ...grpc.CallOption) (*IsExistVideoResp, error) {
+	client := pb.NewVideoClient(m.cli.Conn())
+	return client.IsExistVideo(ctx, in, opts...)
 }

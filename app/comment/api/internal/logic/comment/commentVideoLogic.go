@@ -2,6 +2,8 @@ package comment
 
 import (
 	"context"
+	"giligili/app/comment/rpc/comment"
+	"giligili/common/ctxData"
 
 	"giligili/app/comment/api/internal/svc"
 	"giligili/app/comment/api/internal/types"
@@ -23,8 +25,18 @@ func NewCommentVideoLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Comm
 	}
 }
 
+// CommentVideo 评论视频
 func (l *CommentVideoLogic) CommentVideo(req *types.CommentVideoReq) (resp *types.CommentVideoResp, err error) {
-	// todo: add your logic here and delete this line
+	userId := ctxData.GetUserIdFromCtx(l.ctx)
 
-	return
+	commentVideoResp, err := l.svcCtx.CommentRpcClient.CommentVideo(l.ctx, &comment.CommentVideoReq{
+		UserId:  userId,
+		VideoId: req.VideoId,
+		Content: req.Content,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return &types.CommentVideoResp{Success: commentVideoResp.Success}, nil
 }
