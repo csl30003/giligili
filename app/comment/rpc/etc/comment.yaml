@@ -1,6 +1,20 @@
 Name: comment.rpc
-ListenOn: 0.0.0.0:8080
+ListenOn: 0.0.0.0:9003
 Etcd:
   Hosts:
   - 127.0.0.1:2379
   Key: comment.rpc
+
+Log:
+  ServiceName: comment-rpc
+  Mode: file
+  Path: logs
+  Level: info
+  Encoding: plain
+  KeepDays: 3
+
+MySQL:
+  DataSource: root:csl_520520@tcp(127.0.0.1:3306)/giligili?charset=utf8mb4&parseTime=True&loc=Asia%2FShanghai
+Cache:
+  - Host: 127.0.0.1:6379
+    Pass: csl_520520

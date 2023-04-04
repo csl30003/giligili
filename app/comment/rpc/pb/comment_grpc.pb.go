@@ -18,10 +18,10 @@ import (
 // Requires gRPC-Go v1.32.0 or later.
 const _ = grpc.SupportPackageIsVersion7
 
-// CommentServiceClient is the client API for CommentService service.
+// CommentClient is the client API for Comment service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type CommentServiceClient interface {
+type CommentClient interface {
 	GetVideoCommentList(ctx context.Context, in *GetVideoCommentListReq, opts ...grpc.CallOption) (*GetVideoCommentListResp, error)
 	GetCommentReplyList(ctx context.Context, in *GetCommentReplyListReq, opts ...grpc.CallOption) (*GetCommentReplyListResp, error)
 	CommentVideo(ctx context.Context, in *CommentVideoReq, opts ...grpc.CallOption) (*CommentVideoResp, error)
@@ -29,219 +29,219 @@ type CommentServiceClient interface {
 	DeleteComment(ctx context.Context, in *DeleteCommentReq, opts ...grpc.CallOption) (*DeleteCommentResp, error)
 }
 
-type commentServiceClient struct {
+type commentClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewCommentServiceClient(cc grpc.ClientConnInterface) CommentServiceClient {
-	return &commentServiceClient{cc}
+func NewCommentClient(cc grpc.ClientConnInterface) CommentClient {
+	return &commentClient{cc}
 }
 
-func (c *commentServiceClient) GetVideoCommentList(ctx context.Context, in *GetVideoCommentListReq, opts ...grpc.CallOption) (*GetVideoCommentListResp, error) {
+func (c *commentClient) GetVideoCommentList(ctx context.Context, in *GetVideoCommentListReq, opts ...grpc.CallOption) (*GetVideoCommentListResp, error) {
 	out := new(GetVideoCommentListResp)
-	err := c.cc.Invoke(ctx, "/pb.CommentService/GetVideoCommentList", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/pb.Comment/GetVideoCommentList", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *commentServiceClient) GetCommentReplyList(ctx context.Context, in *GetCommentReplyListReq, opts ...grpc.CallOption) (*GetCommentReplyListResp, error) {
+func (c *commentClient) GetCommentReplyList(ctx context.Context, in *GetCommentReplyListReq, opts ...grpc.CallOption) (*GetCommentReplyListResp, error) {
 	out := new(GetCommentReplyListResp)
-	err := c.cc.Invoke(ctx, "/pb.CommentService/GetCommentReplyList", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/pb.Comment/GetCommentReplyList", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *commentServiceClient) CommentVideo(ctx context.Context, in *CommentVideoReq, opts ...grpc.CallOption) (*CommentVideoResp, error) {
+func (c *commentClient) CommentVideo(ctx context.Context, in *CommentVideoReq, opts ...grpc.CallOption) (*CommentVideoResp, error) {
 	out := new(CommentVideoResp)
-	err := c.cc.Invoke(ctx, "/pb.CommentService/CommentVideo", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/pb.Comment/CommentVideo", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *commentServiceClient) ReplyComment(ctx context.Context, in *ReplyCommentReq, opts ...grpc.CallOption) (*ReplyCommentResp, error) {
+func (c *commentClient) ReplyComment(ctx context.Context, in *ReplyCommentReq, opts ...grpc.CallOption) (*ReplyCommentResp, error) {
 	out := new(ReplyCommentResp)
-	err := c.cc.Invoke(ctx, "/pb.CommentService/ReplyComment", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/pb.Comment/ReplyComment", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *commentServiceClient) DeleteComment(ctx context.Context, in *DeleteCommentReq, opts ...grpc.CallOption) (*DeleteCommentResp, error) {
+func (c *commentClient) DeleteComment(ctx context.Context, in *DeleteCommentReq, opts ...grpc.CallOption) (*DeleteCommentResp, error) {
 	out := new(DeleteCommentResp)
-	err := c.cc.Invoke(ctx, "/pb.CommentService/DeleteComment", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/pb.Comment/DeleteComment", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// CommentServiceServer is the server API for CommentService service.
-// All implementations must embed UnimplementedCommentServiceServer
+// CommentServer is the server API for Comment service.
+// All implementations must embed UnimplementedCommentServer
 // for forward compatibility
-type CommentServiceServer interface {
+type CommentServer interface {
 	GetVideoCommentList(context.Context, *GetVideoCommentListReq) (*GetVideoCommentListResp, error)
 	GetCommentReplyList(context.Context, *GetCommentReplyListReq) (*GetCommentReplyListResp, error)
 	CommentVideo(context.Context, *CommentVideoReq) (*CommentVideoResp, error)
 	ReplyComment(context.Context, *ReplyCommentReq) (*ReplyCommentResp, error)
 	DeleteComment(context.Context, *DeleteCommentReq) (*DeleteCommentResp, error)
-	mustEmbedUnimplementedCommentServiceServer()
+	mustEmbedUnimplementedCommentServer()
 }
 
-// UnimplementedCommentServiceServer must be embedded to have forward compatible implementations.
-type UnimplementedCommentServiceServer struct {
+// UnimplementedCommentServer must be embedded to have forward compatible implementations.
+type UnimplementedCommentServer struct {
 }
 
-func (UnimplementedCommentServiceServer) GetVideoCommentList(context.Context, *GetVideoCommentListReq) (*GetVideoCommentListResp, error) {
+func (UnimplementedCommentServer) GetVideoCommentList(context.Context, *GetVideoCommentListReq) (*GetVideoCommentListResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetVideoCommentList not implemented")
 }
-func (UnimplementedCommentServiceServer) GetCommentReplyList(context.Context, *GetCommentReplyListReq) (*GetCommentReplyListResp, error) {
+func (UnimplementedCommentServer) GetCommentReplyList(context.Context, *GetCommentReplyListReq) (*GetCommentReplyListResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetCommentReplyList not implemented")
 }
-func (UnimplementedCommentServiceServer) CommentVideo(context.Context, *CommentVideoReq) (*CommentVideoResp, error) {
+func (UnimplementedCommentServer) CommentVideo(context.Context, *CommentVideoReq) (*CommentVideoResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CommentVideo not implemented")
 }
-func (UnimplementedCommentServiceServer) ReplyComment(context.Context, *ReplyCommentReq) (*ReplyCommentResp, error) {
+func (UnimplementedCommentServer) ReplyComment(context.Context, *ReplyCommentReq) (*ReplyCommentResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ReplyComment not implemented")
 }
-func (UnimplementedCommentServiceServer) DeleteComment(context.Context, *DeleteCommentReq) (*DeleteCommentResp, error) {
+func (UnimplementedCommentServer) DeleteComment(context.Context, *DeleteCommentReq) (*DeleteCommentResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteComment not implemented")
 }
-func (UnimplementedCommentServiceServer) mustEmbedUnimplementedCommentServiceServer() {}
+func (UnimplementedCommentServer) mustEmbedUnimplementedCommentServer() {}
 
-// UnsafeCommentServiceServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to CommentServiceServer will
+// UnsafeCommentServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to CommentServer will
 // result in compilation errors.
-type UnsafeCommentServiceServer interface {
-	mustEmbedUnimplementedCommentServiceServer()
+type UnsafeCommentServer interface {
+	mustEmbedUnimplementedCommentServer()
 }
 
-func RegisterCommentServiceServer(s grpc.ServiceRegistrar, srv CommentServiceServer) {
-	s.RegisterService(&CommentService_ServiceDesc, srv)
+func RegisterCommentServer(s grpc.ServiceRegistrar, srv CommentServer) {
+	s.RegisterService(&Comment_ServiceDesc, srv)
 }
 
-func _CommentService_GetVideoCommentList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Comment_GetVideoCommentList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetVideoCommentListReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CommentServiceServer).GetVideoCommentList(ctx, in)
+		return srv.(CommentServer).GetVideoCommentList(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/pb.CommentService/GetVideoCommentList",
+		FullMethod: "/pb.Comment/GetVideoCommentList",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CommentServiceServer).GetVideoCommentList(ctx, req.(*GetVideoCommentListReq))
+		return srv.(CommentServer).GetVideoCommentList(ctx, req.(*GetVideoCommentListReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _CommentService_GetCommentReplyList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Comment_GetCommentReplyList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetCommentReplyListReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CommentServiceServer).GetCommentReplyList(ctx, in)
+		return srv.(CommentServer).GetCommentReplyList(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/pb.CommentService/GetCommentReplyList",
+		FullMethod: "/pb.Comment/GetCommentReplyList",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CommentServiceServer).GetCommentReplyList(ctx, req.(*GetCommentReplyListReq))
+		return srv.(CommentServer).GetCommentReplyList(ctx, req.(*GetCommentReplyListReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _CommentService_CommentVideo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Comment_CommentVideo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(CommentVideoReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CommentServiceServer).CommentVideo(ctx, in)
+		return srv.(CommentServer).CommentVideo(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/pb.CommentService/CommentVideo",
+		FullMethod: "/pb.Comment/CommentVideo",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CommentServiceServer).CommentVideo(ctx, req.(*CommentVideoReq))
+		return srv.(CommentServer).CommentVideo(ctx, req.(*CommentVideoReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _CommentService_ReplyComment_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Comment_ReplyComment_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ReplyCommentReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CommentServiceServer).ReplyComment(ctx, in)
+		return srv.(CommentServer).ReplyComment(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/pb.CommentService/ReplyComment",
+		FullMethod: "/pb.Comment/ReplyComment",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CommentServiceServer).ReplyComment(ctx, req.(*ReplyCommentReq))
+		return srv.(CommentServer).ReplyComment(ctx, req.(*ReplyCommentReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _CommentService_DeleteComment_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Comment_DeleteComment_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(DeleteCommentReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CommentServiceServer).DeleteComment(ctx, in)
+		return srv.(CommentServer).DeleteComment(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/pb.CommentService/DeleteComment",
+		FullMethod: "/pb.Comment/DeleteComment",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CommentServiceServer).DeleteComment(ctx, req.(*DeleteCommentReq))
+		return srv.(CommentServer).DeleteComment(ctx, req.(*DeleteCommentReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// CommentService_ServiceDesc is the grpc.ServiceDesc for CommentService service.
+// Comment_ServiceDesc is the grpc.ServiceDesc for Comment service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var CommentService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "pb.CommentService",
-	HandlerType: (*CommentServiceServer)(nil),
+var Comment_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "pb.Comment",
+	HandlerType: (*CommentServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "GetVideoCommentList",
-			Handler:    _CommentService_GetVideoCommentList_Handler,
+			Handler:    _Comment_GetVideoCommentList_Handler,
 		},
 		{
 			MethodName: "GetCommentReplyList",
-			Handler:    _CommentService_GetCommentReplyList_Handler,
+			Handler:    _Comment_GetCommentReplyList_Handler,
 		},
 		{
 			MethodName: "CommentVideo",
-			Handler:    _CommentService_CommentVideo_Handler,
+			Handler:    _Comment_CommentVideo_Handler,
 		},
 		{
 			MethodName: "ReplyComment",
-			Handler:    _CommentService_ReplyComment_Handler,
+			Handler:    _Comment_ReplyComment_Handler,
 		},
 		{
 			MethodName: "DeleteComment",
-			Handler:    _CommentService_DeleteComment_Handler,
+			Handler:    _Comment_DeleteComment_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

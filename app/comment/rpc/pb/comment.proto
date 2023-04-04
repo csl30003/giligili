@@ -4,7 +4,7 @@ package pb;
 
 option go_package = "./pb";
 
-service CommentService {
+service Comment {
   rpc GetVideoCommentList (GetVideoCommentListReq) returns (GetVideoCommentListResp);
   rpc GetCommentReplyList (GetCommentReplyListReq) returns (GetCommentReplyListResp);
   rpc CommentVideo (CommentVideoReq) returns (CommentVideoResp);
