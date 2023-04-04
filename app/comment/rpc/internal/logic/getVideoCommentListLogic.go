@@ -2,6 +2,8 @@ package logic
 
 import (
 	"context"
+	"giligili/app/comment/model"
+	"google.golang.org/grpc/status"
 
 	"giligili/app/comment/rpc/internal/svc"
 	"giligili/app/comment/rpc/pb"
@@ -23,8 +25,29 @@ func NewGetVideoCommentListLogic(ctx context.Context, svcCtx *svc.ServiceContext
 	}
 }
 
+// GetVideoCommentList 获取视频评论列表
 func (l *GetVideoCommentListLogic) GetVideoCommentList(in *pb.GetVideoCommentListReq) (*pb.GetVideoCommentListResp, error) {
-	// todo: add your logic here and delete this line
+	videoCommentList, err := l.svcCtx.CommentModel.FindManyByVideoId(l.ctx, in.VideoId)
+	if err == model.ErrNotFound {
+		return &pb.GetVideoCommentListResp{}, nil
+	}
+	if err != nil {
+		return nil, status.Error(100, "获取评论失败")
+	}
 
-	return &pb.GetVideoCommentListResp{}, nil
+	var videoComments []*pb.VideoComment
+	for _, videoComment := range videoCommentList {
+		videoComments = append(videoComments, &pb.VideoComment{
+			CommentId:    videoComment.Id,
+			UserId:       videoComment.UserId,
+			Content:      videoComment.Content,
+			LikeCount:    videoComment.Like,
+			DislikeCount: videoComment.Dislike,
+			ReplyCount:   videoComment.ReplyCount,
+			CreateTime:   videoComment.CreateTime.String(),
+			UpdateTime:   videoComment.UpdateTime.String(),
+		})
+	}
+
+	return &pb.GetVideoCommentListResp{VideoCommentList: videoComments}, nil
 }

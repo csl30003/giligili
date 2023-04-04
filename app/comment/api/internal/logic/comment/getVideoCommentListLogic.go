@@ -2,6 +2,7 @@ package comment
 
 import (
 	"context"
+	"giligili/app/comment/rpc/comment"
 
 	"giligili/app/comment/api/internal/svc"
 	"giligili/app/comment/api/internal/types"
@@ -23,8 +24,28 @@ func NewGetVideoCommentListLogic(ctx context.Context, svcCtx *svc.ServiceContext
 	}
 }
 
+// GetVideoCommentList 获取视频评论列表
 func (l *GetVideoCommentListLogic) GetVideoCommentList(req *types.GetVideoCommentListReq) (resp *types.GetVideoCommentListResp, err error) {
-	// todo: add your logic here and delete this line
+	getVideoCommentListResp, err := l.svcCtx.CommentRpcClient.GetVideoCommentList(l.ctx, &comment.GetVideoCommentListReq{
+		VideoId: req.VideoId,
+	})
+	if err != nil {
+		return nil, err
+	}
 
-	return
+	var videoCommentList []types.VideoComment
+	for _, videoComment := range getVideoCommentListResp.VideoCommentList {
+		videoCommentList = append(videoCommentList, types.VideoComment{
+			CommentId:    videoComment.CommentId,
+			UserId:       videoComment.UserId,
+			Content:      videoComment.Content,
+			LikeCount:    videoComment.LikeCount,
+			DislikeCount: videoComment.DislikeCount,
+			ReplyCount:   videoComment.ReplyCount,
+			CreateTime:   videoComment.CreateTime,
+			UpdateTime:   videoComment.UpdateTime,
+		})
+	}
+
+	return &types.GetVideoCommentListResp{VideoCommentList: videoCommentList}, nil
 }
