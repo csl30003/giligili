@@ -10,16 +10,16 @@ import (
 	"github.com/zeromicro/go-zero/rest/httpx"
 )
 
-func GetCommentListHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
+func GetCommentReplyListHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		var req types.GetCommentListReq
+		var req types.GetCommentReplyListReq
 		if err := httpx.Parse(r, &req); err != nil {
 			httpx.ErrorCtx(r.Context(), w, err)
 			return
 		}
 
-		l := comment.NewGetCommentListLogic(r.Context(), svcCtx)
-		resp, err := l.GetCommentList(&req)
+		l := comment.NewGetCommentReplyListLogic(r.Context(), svcCtx)
+		resp, err := l.GetCommentReplyList(&req)
 		response.Response(w, resp, err)
 	}
 }

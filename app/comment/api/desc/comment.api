@@ -18,10 +18,15 @@ import (
 	group: comment
 )
 service comment {
-	// 获取评论列表
-	@doc "get comment list"
-	@handler getCommentList
-	get /getCommentList (GetCommentListReq) returns (GetCommentListResp)
+	// 获取视频评论列表
+	@doc "get video comment list"
+	@handler getVideoCommentList
+	get /getVideoCommentList (GetVideoCommentListReq) returns (GetVideoCommentListResp)
+	
+	// 获取评论评论列表
+	@doc "get comment reply list"
+	@handler getCommentReplyList
+	get /getCommentReplyList (GetCommentReplyListReq) returns (GetCommentReplyListResp)
 }
 
 // 需要登录

@@ -9,30 +9,46 @@ info(
 )
 
 type (
-    GetCommentListReq {
-        VideoId int `json:"videoId"`
+    GetVideoCommentListReq {
+        VideoId int64 `json:"videoId"`
     }
-    Comment {
-        CommentId int `json:"commentId"`
-        UserId int `json:"userId"`
+    VideoComment {
+        CommentId int64 `json:"commentId"`
+        UserId int64 `json:"userId"`
         Content string `json:"content"`
-        LikeCount int `json:"likeCount"`
-        DislikeCount int `json:"dislikeCount"`
-        ReplyCount int `json:"replyCount"`
+        LikeCount int64 `json:"likeCount"`
+        DislikeCount int64 `json:"dislikeCount"`
+        ReplyCount int64 `json:"replyCount"`
         CreateTime string `json:"createTime"`
         UpdateTime string `json:"updateTime"`
     }
-    GetCommentListResp {
-        CommentList []Comment `json:"commentList"`
+    GetVideoCommentListResp {
+        VideoCommentList []VideoComment `json:"commentList"`
+    }
+)
+
+type (
+    GetCommentReplyListReq {
+        CommentId int64 `json:"commentId"`
+    }
+    CommentReply {
+        CommentId int64 `json:"commentId"`
+        UserId int64 `json:"userId"`
+        Content string `json:"content"`
+        LikeCount int64 `json:"likeCount"`
+        DislikeCount int64 `json:"dislikeCount"`
+        CreateTime string `json:"createTime"`
+        UpdateTime string `json:"updateTime"`
+    }
+    GetCommentReplyListResp {
+        CommentReplyList []CommentReply `json:"commentReplyList"`
     }
 )
 
 type (
     CommentVideoReq {
-        UserId int `json:"userId"`
-        VideoId int `json:"videoId"`
+        VideoId int64 `json:"videoId"`
         Content string `json:"content"`
-        ReplyId int `json:"replyId"`
     }
     CommentVideoResp {
         Success bool `json:"success"`
@@ -41,8 +57,7 @@ type (
 
 type (
     ReplyCommentReq {
-        UserId int `json:"userId"`
-        CommentId int `json:"commentId"`
+        CommentId int64 `json:"commentId"`
         Content string `json:"content"`
     }
     ReplyCommentResp {
@@ -52,7 +67,7 @@ type (
 
 type (
     DeleteCommentReq {
-        CommentId int `json:"commentId"`
+        CommentId int64 `json:"commentId"`
     }
     DeleteCommentResp {
         Success bool `json:"success"`
