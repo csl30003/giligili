@@ -2,6 +2,8 @@ package comment
 
 import (
 	"context"
+	"giligili/app/comment/rpc/comment"
+	"giligili/common/ctxData"
 
 	"giligili/app/comment/api/internal/svc"
 	"giligili/app/comment/api/internal/types"
@@ -23,8 +25,18 @@ func NewReplyCommentLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Repl
 	}
 }
 
+// ReplyComment 回复评论
 func (l *ReplyCommentLogic) ReplyComment(req *types.ReplyCommentReq) (resp *types.ReplyCommentResp, err error) {
-	// todo: add your logic here and delete this line
+	userId := ctxData.GetUserIdFromCtx(l.ctx)
 
-	return
+	replyCommentResp, err := l.svcCtx.CommentRpcClient.ReplyComment(l.ctx, &comment.ReplyCommentReq{
+		UserId:    userId,
+		CommentId: req.CommentId,
+		Content:   req.Content,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return &types.ReplyCommentResp{Success: replyCommentResp.Success}, nil
 }

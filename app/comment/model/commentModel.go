@@ -28,6 +28,7 @@ type (
 	// and implement the added methods in customCommentModel.
 	CommentModel interface {
 		commentModel
+		FindOneById(ctx context.Context, id int64) (*Comment, error)
 		FindManyByVideoId(ctx context.Context, videoId int64) ([]*VideoCommentTemp, error)
 		FindManyByCommentId(ctx context.Context, commentId int64) ([]*Comment, error)
 	}
@@ -41,6 +42,24 @@ type (
 func NewCommentModel(conn sqlx.SqlConn, c cache.CacheConf) CommentModel {
 	return &customCommentModel{
 		defaultCommentModel: newCommentModel(conn, c),
+	}
+}
+
+// FindOneById 通过 id 获取评论记录
+func (c *customCommentModel) FindOneById(ctx context.Context, id int64) (*Comment, error) {
+	giligiliCommentIdKey := fmt.Sprintf("%s%v", cacheGiligiliCommentIdPrefix, id)
+	var resp Comment
+	err := c.QueryRowCtx(ctx, &resp, giligiliCommentIdKey, func(ctx context.Context, conn sqlx.SqlConn, v interface{}) error {
+		query := fmt.Sprintf("select %s from %s where `id` = ? and delete_time is null limit 1", commentRows, c.table)
+		return conn.QueryRowCtx(ctx, v, query, id)
+	})
+	switch err {
+	case nil:
+		return &resp, nil
+	case sqlc.ErrNotFound:
+		return nil, ErrNotFound
+	default:
+		return nil, err
 	}
 }
 
