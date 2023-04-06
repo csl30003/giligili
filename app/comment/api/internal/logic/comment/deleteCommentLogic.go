@@ -2,6 +2,8 @@ package comment
 
 import (
 	"context"
+	"giligili/app/comment/rpc/comment"
+	"giligili/common/ctxData"
 
 	"giligili/app/comment/api/internal/svc"
 	"giligili/app/comment/api/internal/types"
@@ -23,8 +25,17 @@ func NewDeleteCommentLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Del
 	}
 }
 
+// DeleteComment 删除评论
 func (l *DeleteCommentLogic) DeleteComment(req *types.DeleteCommentReq) (resp *types.DeleteCommentResp, err error) {
-	// todo: add your logic here and delete this line
+	userId := ctxData.GetUserIdFromCtx(l.ctx)
 
-	return
+	deleteCommentResp, err := l.svcCtx.CommentRpcClient.DeleteComment(l.ctx, &comment.DeleteCommentReq{
+		UserId:    userId,
+		CommentId: req.CommentId,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return &types.DeleteCommentResp{Success: deleteCommentResp.Success}, nil
 }
