@@ -52,6 +52,6 @@ Docker、Kubernates
 
 giligili 是我个人练习的项目，主要是用来回顾我近期学习的东西，包括 go-zero、gRPC、Protobuf、Kubernates。开发时间不长，因为 GPT 提高了效率，如果算上学习时间就挺久了。
 
-等到大四做毕业设计就用这个吧，写个前端，视频弹幕不好实现就用 DPlayer，去 CodePen 拿拿代码，k8s 部署下 Nginx，后端写多点 API，MySQL 和 Redis 都弄个主从集群，RabbitMQ 也弄集群。
+等到大四做毕业设计就用这个吧，写写单测，写个前端，视频弹幕不好实现就用 DPlayer，去 CodePen 拿拿代码，k8s 部署下 Nginx，后端写多点 API，MySQL 和 Redis 都弄个主从集群，RabbitMQ 也弄集群。
 
 感谢 Mikaelemmmm 的教学和指导。
