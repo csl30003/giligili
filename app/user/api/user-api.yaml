@@ -1,0 +1,114 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-api
+  namespace: giligili
+  labels:
+    app: user-api
+spec:
+  replicas: 1
+  revisionHistoryLimit: 5
+  selector:
+    matchLabels:
+      app: user-api
+  template:
+    metadata:
+      labels:
+        app: user-api
+    spec:
+      serviceAccountName: find-endpoints
+      containers:
+      - name: user-api
+        image: giligili-user-api:v1
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 8000
+        readinessProbe:
+          tcpSocket:
+            port: 8000
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        livenessProbe:
+          tcpSocket:
+            port: 8000
+          initialDelaySeconds: 15
+          periodSeconds: 20
+        resources:
+          requests:
+            cpu: 200m
+            memory: 50Mi
+          limits:
+            cpu: 300m
+            memory: 100Mi
+        volumeMounts:
+        - name: timezone
+          mountPath: /etc/localtime
+      volumes:
+        - name: timezone
+          hostPath:
+            path: /usr/share/zoneinfo/Asia/Shanghai
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: user-api-svc
+  namespace: giligili
+spec:
+  ports:
+  - nodePort: 32010
+    port: 8000
+    protocol: TCP
+    targetPort: 8000
+  type: NodePort
+  selector:
+    app: user-api
+
+---
+
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: user-api-hpa-c
+  namespace: giligili
+  labels:
+    app: user-api-hpa-c
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: user-api
+  minReplicas: 1
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 80
+
+---
+
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: user-api-hpa-m
+  namespace: giligili
+  labels:
+    app: user-api-hpa-m
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: user-api
+  minReplicas: 1
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 80

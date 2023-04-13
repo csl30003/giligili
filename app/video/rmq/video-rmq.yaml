@@ -1,0 +1,113 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: video-rmq
+  namespace: giligili
+  labels:
+    app: video-rmq
+spec:
+  replicas: 1
+  revisionHistoryLimit: 5
+  selector:
+    matchLabels:
+      app: video-rmq
+  template:
+    metadata:
+      labels:
+        app: video-rmq
+    spec:
+      serviceAccountName: find-endpoints
+      containers:
+      - name: video-rmq
+        image: giligili-video-rmq:v1
+        ports:
+        - containerPort: 10002
+#        readinessProbe:
+#          tcpSocket:
+#            port: 10002
+#          initialDelaySeconds: 5
+#          periodSeconds: 10
+#        livenessProbe:
+#          tcpSocket:
+#            port: 10002
+#          initialDelaySeconds: 15
+#          periodSeconds: 20
+        resources:
+          requests:
+            cpu: 200m
+            memory: 50Mi
+          limits:
+            cpu: 300m
+            memory: 100Mi
+        volumeMounts:
+        - name: timezone
+          mountPath: /etc/localtime
+      volumes:
+        - name: timezone
+          hostPath:
+            path: /usr/share/zoneinfo/Asia/Shanghai
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: video-rmq-svc
+  namespace: giligili
+spec:
+  ports:
+  - nodePort: 32002
+    port: 10002
+    protocol: TCP
+    targetPort: 10002
+  type: NodePort
+  selector:
+    app: video-rmq
+
+---
+
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: video-rmq-hpa-c
+  namespace: giligili
+  labels:
+    app: video-rmq-hpa-c
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: video-rmq
+  minReplicas: 1
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 80
+
+---
+
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: video-rmq-hpa-m
+  namespace: giligili
+  labels:
+    app: video-rmq-hpa-m
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: video-rmq
+  minReplicas: 1
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 80

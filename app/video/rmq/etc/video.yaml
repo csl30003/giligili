@@ -29,6 +29,7 @@ Cache:
     Pass: csl_520520
 
 UserRpcConf:
+#  Target: k8s://giligili/user-rpc-svc:9000
   Etcd:
     Hosts:
       - 127.0.0.1:2379

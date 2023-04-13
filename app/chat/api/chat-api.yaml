@@ -1,0 +1,113 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: chat-api
+  namespace: giligili
+  labels:
+    app: chat-api
+spec:
+  replicas: 1
+  revisionHistoryLimit: 5
+  selector:
+    matchLabels:
+      app: chat-api
+  template:
+    metadata:
+      labels:
+        app: chat-api
+    spec:
+      serviceAccountName: find-endpoints
+      containers:
+      - name: chat-api
+        image: giligili-chat-api:v1
+        ports:
+        - containerPort: 8001
+        readinessProbe:
+          tcpSocket:
+            port: 8001
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        livenessProbe:
+          tcpSocket:
+            port: 8001
+          initialDelaySeconds: 15
+          periodSeconds: 20
+        resources:
+          requests:
+            cpu: 200m
+            memory: 50Mi
+          limits:
+            cpu: 300m
+            memory: 100Mi
+        volumeMounts:
+        - name: timezone
+          mountPath: /etc/localtime
+      volumes:
+        - name: timezone
+          hostPath:
+            path: /usr/share/zoneinfo/Asia/Shanghai
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: chat-api-svc
+  namespace: giligili
+spec:
+  ports:
+  - nodePort: 32011
+    port: 8001
+    protocol: TCP
+    targetPort: 8001
+  type: NodePort
+  selector:
+    app: chat-api
+
+---
+
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: chat-api-hpa-c
+  namespace: giligili
+  labels:
+    app: chat-api-hpa-c
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: chat-api
+  minReplicas: 1
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 80
+
+---
+
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: chat-api-hpa-m
+  namespace: giligili
+  labels:
+    app: chat-api-hpa-m
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: chat-api
+  minReplicas: 1
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 80

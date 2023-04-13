@@ -1,0 +1,111 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: comment-rpc
+  namespace: giligili
+  labels:
+    app: comment-rpc
+spec:
+  replicas: 1
+  revisionHistoryLimit: 5
+  selector:
+    matchLabels:
+      app: comment-rpc
+  template:
+    metadata:
+      labels:
+        app: comment-rpc
+    spec:
+      serviceAccountName: find-endpoints
+      containers:
+      - name: comment-rpc
+        image: giligili-comment-rpc:v1
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 9003
+        readinessProbe:
+          tcpSocket:
+            port: 9003
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        livenessProbe:
+          tcpSocket:
+            port: 9003
+          initialDelaySeconds: 15
+          periodSeconds: 20
+        resources:
+          requests:
+            cpu: 200m
+            memory: 50Mi
+          limits:
+            cpu: 300m
+            memory: 100Mi
+        volumeMounts:
+        - name: timezone
+          mountPath: /etc/localtime
+      volumes:
+        - name: timezone
+          hostPath:
+            path: /usr/share/zoneinfo/Asia/Shanghai
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: comment-rpc-svc
+  namespace: giligili
+spec:
+  ports:
+  - port: 9003
+    targetPort: 9003
+  selector:
+    app: comment-rpc
+
+---
+
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: comment-rpc-hpa-c
+  namespace: giligili
+  labels:
+    app: comment-rpc-hpa-c
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: comment-rpc
+  minReplicas: 1
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 80
+
+---
+
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: comment-rpc-hpa-m
+  namespace: giligili
+  labels:
+    app: comment-rpc-hpa-m
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: comment-rpc
+  minReplicas: 1
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 80

@@ -15,6 +15,7 @@ Auth:
   AccessExpire: 10800
 
 ChatRpcConf:
+#  Target: k8s://giligili/chat-rpc-svc:9001
   Etcd:
     Hosts:
       - 127.0.0.1:2379

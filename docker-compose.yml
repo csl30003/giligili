@@ -1,0 +1,60 @@
+version: '3'
+
+services:
+  mysql:
+    image: mysql/mysql-server:8.0.28
+    container_name: mysql
+    environment:
+      TZ: Asia/Shanghai
+      MYSQL_ROOT_PASSWORD: csl_520520
+    ports:
+      - "33069:3306"
+    volumes:
+      - ./data/mysql/data:/var/lib/mysql
+    command:
+      --default-authentication-plugin=mysql_native_password
+      --character-set-server=utf8mb4
+      --collation-server=utf8mb4_general_ci
+      --explicit_defaults_for_timestamp=true
+      --lower_case_table_names=1
+    privileged: true
+    restart: always
+    networks:
+      - giligili_net
+
+  redis:
+    image: redis:6.2.5
+    container_name: redis
+    ports:
+      - "36379:6379"
+    environment:
+      TZ: Asia/Shanghai
+    volumes:
+      - ./data/redis/data:/data:rw
+    command: "redis-server --requirepass csl_520520  --appendonly yes"
+    privileged: true
+    restart: always
+    networks:
+      - giligili_net
+
+
+  rabbitmq:
+    image: rabbitmq:3.8.3-management
+    container_name: rabbitmq
+    hostname: rabbitmq_host
+    environment:
+      RABBITMQ_DEFAULT_USER: root
+      RABBITMQ_DEFAULT_PASS: csl_520520
+    volumes:
+      - ./data/rabbitmq/log:/var/log/rabbitmq #挂载 RabbitMQ日志
+      - ./data/rabbitmq/data:/var/lib/rabbitmq #挂载 RabbitMQ数据
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    restart: always
+    networks:
+      - giligili_net
+
+networks:
+  giligili_net:
+    driver: bridge

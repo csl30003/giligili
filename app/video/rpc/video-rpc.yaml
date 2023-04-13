@@ -1,0 +1,110 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: video-rpc
+  namespace: giligili
+  labels:
+    app: video-rpc
+spec:
+  replicas: 1
+  revisionHistoryLimit: 5
+  selector:
+    matchLabels:
+      app: video-rpc
+  template:
+    metadata:
+      labels:
+        app: video-rpc
+    spec:
+      serviceAccountName: find-endpoints
+      containers:
+      - name: video-rpc
+        image: giligili-video-rpc:v1
+        ports:
+        - containerPort: 9002
+        readinessProbe:
+          tcpSocket:
+            port: 9002
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        livenessProbe:
+          tcpSocket:
+            port: 9002
+          initialDelaySeconds: 15
+          periodSeconds: 20
+        resources:
+          requests:
+            cpu: 200m
+            memory: 50Mi
+          limits:
+            cpu: 300m
+            memory: 100Mi
+        volumeMounts:
+        - name: timezone
+          mountPath: /etc/localtime
+      volumes:
+        - name: timezone
+          hostPath:
+            path: /usr/share/zoneinfo/Asia/Shanghai
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: video-rpc-svc
+  namespace: giligili
+spec:
+  ports:
+  - port: 9002
+    targetPort: 9002
+  selector:
+    app: video-rpc
+
+---
+
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: video-rpc-hpa-c
+  namespace: giligili
+  labels:
+    app: video-rpc-hpa-c
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: video-rpc
+  minReplicas: 1
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 80
+
+---
+
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: video-rpc-hpa-m
+  namespace: giligili
+  labels:
+    app: video-rpc-hpa-m
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: video-rpc
+  minReplicas: 1
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 80

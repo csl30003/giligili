@@ -15,6 +15,7 @@ Auth:
   AccessExpire: 10800
 
 VideoRpcConf:
+#  Target: k8s://giligili/video-rpc-svc:9002
   Etcd:
     Hosts:
       - 127.0.0.1:2379
